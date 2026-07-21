@@ -1,24 +1,44 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" data-theme="dark">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Horus Heresy — Reading Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #14110f;
-    --bg-raised: #1c1815;
-    --ink: #e6dcc6;
-    --ink-dim: #a89a7c;
-    --ink-faint: #6e644f;
-    --rule: #2a241e;
-    --accent: #b87333;
-    --accent-soft: #8a5624;
-    --raven: #6d7a8a;
-    --read-tint: #4a4335;
+  /* ============================================================
+     THEMES — high contrast, WCAG AA+ on body text
+     ============================================================ */
+  :root[data-theme="dark"] {
+    --bg: #0f0d0b;
+    --bg-raised: #1a1613;
+    --ink: #f5efe0;             /* ~15:1 on bg — near white */
+    --ink-dim: #d4c9ae;         /* ~10:1 on bg — very readable blurbs */
+    --ink-meta: #a89a7c;        /* ~5:1 on bg — meta labels */
+    --ink-faint: #7a6f58;       /* dim ornamentation */
+    --rule: #3a322a;
+    --accent: #d99a4a;          /* brighter copper for dark bg */
+    --accent-soft: #a06e2f;
+    --raven: #8fb0d4;           /* brighter cornflower on dark */
+    --read-tint: #7a6f58;
+    --check-tick: #0f0d0b;
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f4efe2;
+    --bg-raised: #ebe4d2;
+    --ink: #14110d;             /* ~16:1 on bg — near black */
+    --ink-dim: #3d3628;         /* ~10:1 on bg */
+    --ink-meta: #6a5d43;        /* ~5:1 on bg */
+    --ink-faint: #8a7d63;
+    --rule: #d0c4a3;
+    --accent: #8a4315;          /* dark copper — high contrast on cream */
+    --accent-soft: #6a3410;
+    --raven: #2f4160;
+    --read-tint: #8a7d63;
+    --check-tick: #f4efe2;
   }
 
   * { box-sizing: border-box; }
@@ -33,17 +53,17 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    transition: background 0.2s ease, color 0.2s ease;
   }
 
   body {
     background-image:
-      radial-gradient(ellipse at top, rgba(184, 115, 51, 0.04) 0%, transparent 60%),
-      radial-gradient(ellipse at bottom, rgba(109, 122, 138, 0.02) 0%, transparent 50%);
+      radial-gradient(ellipse at top, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 60%);
     min-height: 100vh;
   }
 
   .wrap {
-    max-width: 860px;
+    max-width: 880px;
     margin: 0 auto;
     padding: 48px 24px 96px;
   }
@@ -52,6 +72,28 @@
     border-bottom: 1px solid var(--rule);
     padding-bottom: 32px;
     margin-bottom: 32px;
+    position: relative;
+  }
+
+  .theme-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-dim);
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
   }
 
   .eyebrow {
@@ -61,6 +103,7 @@
     text-transform: uppercase;
     color: var(--accent);
     margin-bottom: 12px;
+    font-weight: 500;
   }
 
   h1 {
@@ -69,28 +112,32 @@
     font-size: clamp(38px, 6vw, 56px);
     line-height: 1.05;
     letter-spacing: -0.01em;
-    margin: 0 0 8px;
+    margin: 0 0 12px;
     font-style: italic;
+    color: var(--ink);
   }
 
   .subtitle {
     color: var(--ink-dim);
     font-size: 15px;
-    max-width: 55ch;
+    max-width: 60ch;
     margin: 0;
+    line-height: 1.55;
   }
+
+  .subtitle .rg-dot { color: var(--raven); font-weight: 600; }
 
   .progress-block {
     display: flex;
     align-items: baseline;
     gap: 24px;
-    margin-top: 28px;
+    margin-top: 32px;
     flex-wrap: wrap;
   }
 
   .progress-num {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 44px;
+    font-size: 46px;
     font-weight: 500;
     color: var(--ink);
     line-height: 1;
@@ -99,15 +146,19 @@
   .progress-num em {
     color: var(--accent);
     font-style: normal;
+    font-weight: 600;
   }
+
+  .progress-num .sep { color: var(--ink-faint); }
 
   .progress-bar {
     flex: 1;
     min-width: 200px;
-    height: 2px;
+    height: 3px;
     background: var(--rule);
     position: relative;
     overflow: hidden;
+    border-radius: 2px;
   }
 
   .progress-bar > span {
@@ -123,7 +174,8 @@
     font-size: 11px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--ink-meta);
+    font-weight: 500;
   }
 
   .filters {
@@ -137,7 +189,7 @@
   .filters button {
     background: none;
     border: none;
-    color: var(--ink-dim);
+    color: var(--ink-meta);
     padding: 10px 14px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -147,27 +199,29 @@
     position: relative;
     transition: color 0.15s ease;
     margin-bottom: -1px;
+    font-weight: 500;
   }
 
   .filters button:hover { color: var(--ink); }
 
   .filters button.active {
     color: var(--accent);
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
   }
 
   .filters button .count {
     color: var(--ink-faint);
     margin-left: 6px;
+    font-weight: 400;
   }
 
   .section-head {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-style: italic;
     font-weight: 500;
-    font-size: 22px;
+    font-size: 24px;
     color: var(--ink);
-    margin: 40px 0 16px;
+    margin: 40px 0 12px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--rule);
     display: flex;
@@ -182,14 +236,15 @@
     font-size: 10px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--ink-meta);
+    font-weight: 500;
   }
 
   .book {
     display: grid;
-    grid-template-columns: 44px 1fr auto;
+    grid-template-columns: 48px 1fr auto;
     gap: 16px;
-    padding: 16px 0;
+    padding: 18px 0;
     border-bottom: 1px solid var(--rule);
     align-items: start;
     transition: opacity 0.2s ease;
@@ -199,69 +254,69 @@
 
   .slot {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 18px;
-    color: var(--ink-faint);
+    font-size: 19px;
+    color: var(--ink-meta);
     padding-top: 2px;
     text-align: right;
     font-feature-settings: "onum" 1;
     font-variant-numeric: oldstyle-nums;
+    font-weight: 500;
   }
 
-  .book-body {
-    min-width: 0;
-  }
+  .book-body { min-width: 0; }
 
   .book-title-row {
     display: flex;
     align-items: baseline;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .book-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 21px;
     color: var(--ink);
     line-height: 1.2;
   }
 
   .book-author {
     color: var(--ink-dim);
-    font-size: 13px;
+    font-size: 14px;
     font-style: italic;
   }
 
   .book-blurb {
     color: var(--ink-dim);
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.55;
     margin-top: 4px;
   }
 
   .book-meta {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-top: 8px;
+    margin-top: 10px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-size: 10.5px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--ink-meta);
+    font-weight: 500;
   }
 
-  .book-meta .rating { color: var(--accent); }
+  .book-meta .rating { color: var(--accent); font-weight: 600; }
   .book-meta .rg {
     color: var(--raven);
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    font-weight: 600;
   }
   .book-meta .rg::before { content: "◆"; font-size: 8px; }
-  .book-meta .kind { }
-  .book-meta .must { color: var(--accent); font-weight: 500; }
+  .book-meta .must { color: var(--accent); font-weight: 600; }
 
   /* checkbox */
   .check {
@@ -274,13 +329,14 @@
   .check input {
     appearance: none;
     -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
-    border: 1px solid var(--ink-faint);
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid var(--ink-meta);
     background: transparent;
     cursor: pointer;
     position: relative;
     transition: border-color 0.15s ease, background 0.15s ease;
+    border-radius: 2px;
   }
 
   .check input:hover { border-color: var(--accent); }
@@ -293,24 +349,29 @@
   .check input:checked::after {
     content: "";
     position: absolute;
-    left: 6px;
-    top: 2px;
+    left: 7px;
+    top: 3px;
     width: 6px;
     height: 12px;
-    border: solid var(--bg);
-    border-width: 0 2px 2px 0;
+    border: solid var(--check-tick);
+    border-width: 0 2.5px 2.5px 0;
     transform: rotate(45deg);
   }
 
-  /* read state */
-  .book.read .book-title,
-  .book.read .slot { color: var(--read-tint); font-style: italic; }
+  .check input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* read state — still readable, just clearly de-emphasised */
+  .book.read .book-title { color: var(--read-tint); font-style: italic; }
+  .book.read .slot { color: var(--read-tint); }
   .book.read .book-author,
-  .book.read .book-blurb,
+  .book.read .book-blurb { color: var(--read-tint); }
   .book.read .book-meta { color: var(--read-tint); }
   .book.read .book-meta .rating,
   .book.read .book-meta .rg,
-  .book.read .book-meta .must { color: var(--read-tint); }
+  .book.read .book-meta .must { color: var(--read-tint); font-weight: 500; }
 
   footer {
     margin-top: 64px;
@@ -321,16 +382,17 @@
     gap: 16px;
     flex-wrap: wrap;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-size: 10.5px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--ink-meta);
+    align-items: center;
   }
 
   footer button {
     background: none;
     border: 1px solid var(--rule);
-    color: var(--ink-faint);
+    color: var(--ink-dim);
     padding: 8px 14px;
     font-family: inherit;
     font-size: inherit;
@@ -338,11 +400,12 @@
     text-transform: inherit;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
+    font-weight: 500;
   }
 
   footer button:hover {
     color: var(--accent);
-    border-color: var(--accent-soft);
+    border-color: var(--accent);
   }
 
   .hidden { display: none !important; }
@@ -350,19 +413,27 @@
   .empty {
     text-align: center;
     padding: 48px 0;
-    color: var(--ink-faint);
+    color: var(--ink-meta);
     font-style: italic;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
+    font-size: 20px;
   }
 
   @media (max-width: 600px) {
     .wrap { padding: 32px 18px 64px; }
-    .book { grid-template-columns: 32px 1fr auto; gap: 12px; padding: 14px 0; }
-    .slot { font-size: 15px; }
-    .book-title { font-size: 17px; }
-    .book-blurb { font-size: 13px; }
+    .theme-toggle { position: static; margin-bottom: 16px; }
+    .book { grid-template-columns: 34px 1fr auto; gap: 12px; padding: 16px 0; }
+    .slot { font-size: 16px; }
+    .book-title { font-size: 18px; }
+    .book-blurb { font-size: 13.5px; }
     h1 { font-size: 38px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>
 </head>
@@ -370,12 +441,13 @@
 <div class="wrap">
 
   <header>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☾ Dark</button>
     <div class="eyebrow">Warhammer 40,000 · Black Library</div>
     <h1>The Horus Heresy</h1>
-    <p class="subtitle">Reading log in recommended order. Ratings out of 10. <span style="color:var(--raven)">◆</span> marks Raven Guard content worth reading regardless of rating.</p>
+    <p class="subtitle">Reading log in recommended order. Ratings out of 10. <span class="rg-dot">◆</span> marks Raven Guard content worth reading regardless of rating.</p>
 
     <div class="progress-block">
-      <div class="progress-num"><em id="progress-count">0</em> <span style="color:var(--ink-faint)">/</span> <span id="progress-total">0</span></div>
+      <div class="progress-num"><em id="progress-count">0</em> <span class="sep">/</span> <span id="progress-total">0</span></div>
       <div class="progress-bar"><span id="progress-fill"></span></div>
       <div class="progress-label" id="progress-pct">0% complete</div>
     </div>
@@ -405,19 +477,35 @@
 
 <script>
 // ============================================================
+// Theme handling
+// ============================================================
+const THEME_KEY = 'hh-theme';
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  const btn = document.getElementById('theme-toggle');
+  btn.textContent = t === 'dark' ? '☾ Dark' : '☀ Light';
+  try { localStorage.setItem(THEME_KEY, t); } catch {}
+}
+(function initTheme(){
+  let saved = null;
+  try { saved = localStorage.getItem(THEME_KEY); } catch {}
+  if (saved) return applyTheme(saved);
+  const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  applyTheme(prefersLight ? 'light' : 'dark');
+})();
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+});
+
+// ============================================================
 // Horus Heresy reading data
-// slot: series number (I-LIV) or SoT-N or A (novella/anthology inline)
-// section: grouping for headers
-// rg: raven guard content flag
-// must: must-read
 // ============================================================
 const BOOKS = [
-  // OPENING TRILOGY
   { slot: "I", title: "Horus Rising", author: "Dan Abnett", rating: 10, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "\"I was there, the day Horus slew the Emperor.\" The brotherhood before the fall." },
   { slot: "II", title: "False Gods", author: "Graham McNeill", rating: 8, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "The wound on Davin. The actual moment Horus tips." },
   { slot: "III", title: "Galaxy in Flames", author: "Ben Counter", rating: 7, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "Isstvaan III. Virus bombs. Tragic and pacey; the plot carries it." },
 
-  // DROPSITE ERA
   { slot: "IV", title: "The Flight of the Eisenstein", author: "James Swallow", rating: 8, kind: "Novel", section: "The Dropsite Era", must: true, blurb: "Garro smuggling the warning to Terra. Reads like a thriller." },
   { slot: "V", title: "Fulgrim", author: "Graham McNeill", rating: 7, kind: "Novel", section: "The Dropsite Era", blurb: "Dropsite Massacre. Ferrus Manus's head hits the floor here. Slow middle, crucial events." },
   { slot: "VI", title: "Descent of Angels", author: "Mitchel Scanlon", rating: 4, kind: "Novel", section: "The Dropsite Era", blurb: "Dark Angel origin on Caliban. Feudal, slow, skippable." },
@@ -426,7 +514,6 @@ const BOOKS = [
   { slot: "IX", title: "Mechanicum", author: "Graham McNeill", rating: 7, kind: "Novel", section: "The Dropsite Era", blurb: "Martian civil war. Skippable but solid." },
   { slot: "X", title: "Tales of Heresy", author: "Various", rating: 8, kind: "Anthology", section: "The Dropsite Era", blurb: "Read for Blood Games, The Last Church, After Desh'ea. Kharn meets Angron here." },
 
-  // SECOND WAVE
   { slot: "XI", title: "Fallen Angels", author: "Mike Lee", rating: 4, kind: "Novel", section: "The Second Wave", blurb: "Skip unless you're following the Dark Angels arc." },
   { slot: "XII", title: "A Thousand Sons", author: "Graham McNeill", rating: 9, kind: "Novel", section: "The Second Wave", must: true, blurb: "Magnus's tragedy. Pair immediately with Prospero Burns." },
   { slot: "XV", title: "Prospero Burns", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Second Wave", must: true, blurb: "Same event, Space Wolves POV. Anthropological, strange, brilliant." },
@@ -435,11 +522,9 @@ const BOOKS = [
   { slot: "XVI", title: "Age of Darkness", author: "Various", rating: 7, kind: "Anthology", section: "The Second Wave", rg: true, blurb: "Read for The Face of Treachery (first post-Isstvaan Raven Guard) and Abnett/ADB shorts." },
   { slot: "XVII", title: "The Outcast Dead", author: "Graham McNeill", rating: 6, kind: "Novel", section: "The Second Wave", blurb: "Traitor marines trapped on Terra when the news breaks." },
 
-  // RAVEN GUARD BLOCK
   { slot: "★", title: "Raven's Flight", author: "Gav Thorpe", rating: 8, kind: "Audio drama", section: "Raven Guard Detour", rg: true, blurb: "Corax's escape from Isstvaan V. Also included in Shadows of Treachery." },
   { slot: "XVIII", title: "Deliverance Lost", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "Raven Guard Detour", rg: true, blurb: "The primary Raven Guard novel. Corax returns to Deliverance with Emperor's gene-tech; Alpha Legion has its fingers everywhere." },
 
-  // CALTH
   { slot: "XIX", title: "Know No Fear", author: "Dan Abnett", rating: 10, kind: "Novel", section: "Calth & Shadow Crusade", must: true, blurb: "The Battle of Calth. Minute-by-minute. Abnett's best structural experiment." },
   { slot: "XX", title: "The Primarchs", author: "Various", rating: 6, kind: "Anthology", section: "Calth & Shadow Crusade", blurb: "Read for The Reflection Crack'd (ADB) and Feat of Iron (Wraight)." },
   { slot: "XXI", title: "Fear to Tread", author: "James Swallow", rating: 7, kind: "Novel", section: "Calth & Shadow Crusade", blurb: "Blood Angels at Signus Prime. Sanguinius vs a greater daemon." },
@@ -448,7 +533,6 @@ const BOOKS = [
   { slot: "XXIV", title: "Betrayer", author: "Aaron Dembski-Bowden", rating: 10, kind: "Novel", section: "Calth & Shadow Crusade", must: true, blurb: "Angron and Lorgar tearing Ultramar apart. Top-three book in the series." },
   { slot: "XXV", title: "Mark of Calth", author: "Various", rating: 6, kind: "Anthology", section: "Calth & Shadow Crusade", blurb: "Calth aftermath shorts. Skippable, couple of decent ones." },
 
-  // MIDDLE / IMPERIUM SECUNDUS
   { slot: "XXVI", title: "Vulkan Lives", author: "Nick Kyme", rating: 5, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "Curze torturing Vulkan for 400 pages. Skippable." },
   { slot: "XXVII", title: "The Unremembered Empire", author: "Dan Abnett", rating: 8, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, must: true, blurb: "Guilliman builds a second Imperium; lost primarchs arrive — including Corax." },
   { slot: "XXVIII", title: "Scars", author: "Chris Wraight", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, blurb: "The White Scars book everyone sleeps on. Wraight is quietly one of the series' best." },
@@ -464,7 +548,6 @@ const BOOKS = [
   { slot: "XXXVIII", title: "Angels of Caliban", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, must: true, blurb: "Imperium Secundus concludes. Corax makes a defining decision." },
   { slot: "XXXIX", title: "Praetorian of Dorn", author: "John French", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", must: true, blurb: "Alpha Legion vs Imperial Fists on Terra. Huge end-reveal." },
 
-  // LATE HERESY
   { slot: "XL", title: "Corax", author: "Gav Thorpe", rating: 7, kind: "Anthology", section: "The Road to Terra", rg: true, must: true, blurb: "The Raven Guard anthology: Soulforge, Ravenlord, Weregeld, shorts. Your primary RG volume." },
   { slot: "XLI", title: "The Master of Mankind", author: "Aaron Dembski-Bowden", rating: 9, kind: "Novel", section: "The Road to Terra", must: true, blurb: "The Emperor fighting the War in the Webway. Reframes everything." },
   { slot: "XLII", title: "Garro", author: "James Swallow", rating: 8, kind: "Novel", section: "The Road to Terra", blurb: "Collected Garro audio dramas. If you liked Eisenstein, you'll love this." },
@@ -481,7 +564,6 @@ const BOOKS = [
   { slot: "LIII", title: "Titandeath", author: "Guy Haley", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "The Beta-Garmon titan war. Concept better than execution." },
   { slot: "LIV", title: "The Buried Dagger", author: "James Swallow", rating: 7, kind: "Novel", section: "The Road to Terra", blurb: "Mortarion's fall and Garro's final chapter. Better than its reputation." },
 
-  // SIEGE OF TERRA
   { slot: "SoT 1", title: "The Solar War", author: "John French", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Horus breaches the Sol system. Void war, desperate defences." },
   { slot: "★", title: "Sons of the Selenar", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", rg: true, blurb: "Raven Guard-led recovery mission on the moon. Between SoT 1 and SoT 2." },
   { slot: "SoT 2", title: "The Lost and the Damned", author: "Guy Haley", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Siege begins properly. Horus's forces hit the walls." },
@@ -515,8 +597,6 @@ function saveState(s) {
 let state = loadState();
 let currentFilter = 'all';
 
-// pre-mark books the user has already listened to (from Audible library screenshot)
-// only runs on first load / when state is completely empty
 const PRE_READ = [
   "Horus Rising","False Gods","Galaxy in Flames","The Flight of the Eisenstein",
   "Fulgrim","Legion","Mechanicum","Tales of Heresy","A Thousand Sons","Prospero Burns",
@@ -557,7 +637,7 @@ function renderList() {
   document.getElementById('empty').classList.add('hidden');
 
   let currentSection = null;
-  visible.forEach((b, idx) => {
+  visible.forEach(b => {
     if (b.section !== currentSection) {
       currentSection = b.section;
       const h = document.createElement('h2');
@@ -592,7 +672,6 @@ function renderList() {
     root.appendChild(row);
   });
 
-  // wire up checkboxes
   root.querySelectorAll('input[type=checkbox]').forEach(cb => {
     cb.addEventListener('change', e => {
       const title = e.target.dataset.title;
@@ -644,7 +723,6 @@ document.getElementById('export-btn').addEventListener('click', () => {
   const unread = BOOKS.filter(b => !state[keyOf(b)]).map(b => `[ ] ${b.slot} · ${b.title} — ${b.author}`);
   const text = `HORUS HERESY — READING LOG\n\nRead (${read.length}):\n${read.join('\n')}\n\nTo read (${unread.length}):\n${unread.join('\n')}`;
   navigator.clipboard?.writeText(text).then(() => alert('Copied to clipboard.'), () => {
-    // fallback
     const w = window.open('', '_blank');
     w.document.write('<pre>' + text.replace(/</g,'&lt;') + '</pre>');
   });
