@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Horus Heresy — Reading Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14110f;
+    --bg-raised: #1c1815;
+    --ink: #e6dcc6;
+    --ink-dim: #a89a7c;
+    --ink-faint: #6e644f;
+    --rule: #2a241e;
+    --accent: #b87333;
+    --accent-soft: #8a5624;
+    --raven: #6d7a8a;
+    --read-tint: #4a4335;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse at top, rgba(184, 115, 51, 0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(109, 122, 138, 0.02) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  header {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(38px, 6vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    font-style: italic;
+  }
+
+  .subtitle {
+    color: var(--ink-dim);
+    font-size: 15px;
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .progress-block {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .progress-num {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 44px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .progress-num em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .progress-bar {
+    flex: 1;
+    min-width: 200px;
+    height: 2px;
+    background: var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-bar > span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .filters {
+    display: flex;
+    gap: 4px;
+    margin: 32px 0 20px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .filters button {
+    background: none;
+    border: none;
+    color: var(--ink-dim);
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.15s ease;
+    margin-bottom: -1px;
+  }
+
+  .filters button:hover { color: var(--ink); }
+
+  .filters button.active {
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .filters button .count {
+    color: var(--ink-faint);
+    margin-left: 6px;
+  }
+
+  .section-head {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--ink);
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .section-head .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .book {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+    transition: opacity 0.2s ease;
+  }
+
+  .book:last-child { border-bottom: none; }
+
+  .slot {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    color: var(--ink-faint);
+    padding-top: 2px;
+    text-align: right;
+    font-feature-settings: "onum" 1;
+    font-variant-numeric: oldstyle-nums;
+  }
+
+  .book-body {
+    min-width: 0;
+  }
+
+  .book-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  .book-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .book-author {
+    color: var(--ink-dim);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  .book-blurb {
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  .book-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .book-meta .rating { color: var(--accent); }
+  .book-meta .rg {
+    color: var(--raven);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .book-meta .rg::before { content: "◆"; font-size: 8px; }
+  .book-meta .kind { }
+  .book-meta .must { color: var(--accent); font-weight: 500; }
+
+  /* checkbox */
+  .check {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: start;
+    padding-top: 4px;
+  }
+
+  .check input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--ink-faint);
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .check input:hover { border-color: var(--accent); }
+
+  .check input:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .check input:checked::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  /* read state */
+  .book.read .book-title,
+  .book.read .slot { color: var(--read-tint); font-style: italic; }
+  .book.read .book-author,
+  .book.read .book-blurb,
+  .book.read .book-meta { color: var(--read-tint); }
+  .book.read .book-meta .rating,
+  .book.read .book-meta .rg,
+  .book.read .book-meta .must { color: var(--read-tint); }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  footer button {
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--ink-faint);
+    padding: 8px 14px;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  footer button:hover {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+  }
+
+  .hidden { display: none !important; }
+
+  .empty {
+    text-align: center;
+    padding: 48px 0;
+    color: var(--ink-faint);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 32px 18px 64px; }
+    .book { grid-template-columns: 32px 1fr auto; gap: 12px; padding: 14px 0; }
+    .slot { font-size: 15px; }
+    .book-title { font-size: 17px; }
+    .book-blurb { font-size: 13px; }
+    h1 { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Warhammer 40,000 · Black Library</div>
+    <h1>The Horus Heresy</h1>
+    <p class="subtitle">Reading log in recommended order. Ratings out of 10. <span style="color:var(--raven)">◆</span> marks Raven Guard content worth reading regardless of rating.</p>
+
+    <div class="progress-block">
+      <div class="progress-num"><em id="progress-count">0</em> <span style="color:var(--ink-faint)">/</span> <span id="progress-total">0</span></div>
+      <div class="progress-bar"><span id="progress-fill"></span></div>
+      <div class="progress-label" id="progress-pct">0% complete</div>
+    </div>
+  </header>
+
+  <nav class="filters" role="tablist">
+    <button class="active" data-filter="all">All <span class="count" id="count-all"></span></button>
+    <button data-filter="toread">To read <span class="count" id="count-toread"></span></button>
+    <button data-filter="read">Read <span class="count" id="count-read"></span></button>
+    <button data-filter="rg">Raven Guard <span class="count" id="count-rg"></span></button>
+    <button data-filter="must">Must-read <span class="count" id="count-must"></span></button>
+  </nav>
+
+  <main id="list"></main>
+
+  <div class="empty hidden" id="empty">Nothing here — try a different filter.</div>
+
+  <footer>
+    <div>Local save · your browser only</div>
+    <div style="display:flex; gap:8px;">
+      <button id="export-btn">Export</button>
+      <button id="reset-btn">Reset</button>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// ============================================================
+// Horus Heresy reading data
+// slot: series number (I-LIV) or SoT-N or A (novella/anthology inline)
+// section: grouping for headers
+// rg: raven guard content flag
+// must: must-read
+// ============================================================
+const BOOKS = [
+  // OPENING TRILOGY
+  { slot: "I", title: "Horus Rising", author: "Dan Abnett", rating: 10, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "\"I was there, the day Horus slew the Emperor.\" The brotherhood before the fall." },
+  { slot: "II", title: "False Gods", author: "Graham McNeill", rating: 8, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "The wound on Davin. The actual moment Horus tips." },
+  { slot: "III", title: "Galaxy in Flames", author: "Ben Counter", rating: 7, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "Isstvaan III. Virus bombs. Tragic and pacey; the plot carries it." },
+
+  // DROPSITE ERA
+  { slot: "IV", title: "The Flight of the Eisenstein", author: "James Swallow", rating: 8, kind: "Novel", section: "The Dropsite Era", must: true, blurb: "Garro smuggling the warning to Terra. Reads like a thriller." },
+  { slot: "V", title: "Fulgrim", author: "Graham McNeill", rating: 7, kind: "Novel", section: "The Dropsite Era", blurb: "Dropsite Massacre. Ferrus Manus's head hits the floor here. Slow middle, crucial events." },
+  { slot: "VI", title: "Descent of Angels", author: "Mitchel Scanlon", rating: 4, kind: "Novel", section: "The Dropsite Era", blurb: "Dark Angel origin on Caliban. Feudal, slow, skippable." },
+  { slot: "VII", title: "Legion", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Dropsite Era", must: true, blurb: "The Alpha Legion book that isn't about the Alpha Legion. End-reveal rewrites everything." },
+  { slot: "VIII", title: "Battle for the Abyss", author: "Ben Counter", rating: 2, kind: "Novel", section: "The Dropsite Era", blurb: "Don't. Nothing in it matters." },
+  { slot: "IX", title: "Mechanicum", author: "Graham McNeill", rating: 7, kind: "Novel", section: "The Dropsite Era", blurb: "Martian civil war. Skippable but solid." },
+  { slot: "X", title: "Tales of Heresy", author: "Various", rating: 8, kind: "Anthology", section: "The Dropsite Era", blurb: "Read for Blood Games, The Last Church, After Desh'ea. Kharn meets Angron here." },
+
+  // SECOND WAVE
+  { slot: "XI", title: "Fallen Angels", author: "Mike Lee", rating: 4, kind: "Novel", section: "The Second Wave", blurb: "Skip unless you're following the Dark Angels arc." },
+  { slot: "XII", title: "A Thousand Sons", author: "Graham McNeill", rating: 9, kind: "Novel", section: "The Second Wave", must: true, blurb: "Magnus's tragedy. Pair immediately with Prospero Burns." },
+  { slot: "XV", title: "Prospero Burns", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Second Wave", must: true, blurb: "Same event, Space Wolves POV. Anthropological, strange, brilliant." },
+  { slot: "XIII", title: "Nemesis", author: "James Swallow", rating: 6, kind: "Novel", section: "The Second Wave", blurb: "Execution Force sent after Horus. Pulpy fun." },
+  { slot: "XIV", title: "The First Heretic", author: "Aaron Dembski-Bowden", rating: 10, kind: "Novel", section: "The Second Wave", must: true, blurb: "Lorgar, Argel Tal, the real origin of the Heresy. Arguably the best in the series." },
+  { slot: "XVI", title: "Age of Darkness", author: "Various", rating: 7, kind: "Anthology", section: "The Second Wave", rg: true, blurb: "Read for The Face of Treachery (first post-Isstvaan Raven Guard) and Abnett/ADB shorts." },
+  { slot: "XVII", title: "The Outcast Dead", author: "Graham McNeill", rating: 6, kind: "Novel", section: "The Second Wave", blurb: "Traitor marines trapped on Terra when the news breaks." },
+
+  // RAVEN GUARD BLOCK
+  { slot: "★", title: "Raven's Flight", author: "Gav Thorpe", rating: 8, kind: "Audio drama", section: "Raven Guard Detour", rg: true, blurb: "Corax's escape from Isstvaan V. Also included in Shadows of Treachery." },
+  { slot: "XVIII", title: "Deliverance Lost", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "Raven Guard Detour", rg: true, blurb: "The primary Raven Guard novel. Corax returns to Deliverance with Emperor's gene-tech; Alpha Legion has its fingers everywhere." },
+
+  // CALTH
+  { slot: "XIX", title: "Know No Fear", author: "Dan Abnett", rating: 10, kind: "Novel", section: "Calth & Shadow Crusade", must: true, blurb: "The Battle of Calth. Minute-by-minute. Abnett's best structural experiment." },
+  { slot: "XX", title: "The Primarchs", author: "Various", rating: 6, kind: "Anthology", section: "Calth & Shadow Crusade", blurb: "Read for The Reflection Crack'd (ADB) and Feat of Iron (Wraight)." },
+  { slot: "XXI", title: "Fear to Tread", author: "James Swallow", rating: 7, kind: "Novel", section: "Calth & Shadow Crusade", blurb: "Blood Angels at Signus Prime. Sanguinius vs a greater daemon." },
+  { slot: "XXII", title: "Shadows of Treachery", author: "Various", rating: 8, kind: "Anthology", section: "Calth & Shadow Crusade", rg: true, blurb: "Prince of Crows (ADB), The Lightning Tower (Abnett), and Raven's Flight." },
+  { slot: "XXIII", title: "Angel Exterminatus", author: "Graham McNeill", rating: 7, kind: "Novel", section: "Calth & Shadow Crusade", blurb: "Fulgrim and Perturabo on a mad treasure hunt. Perturabo character study." },
+  { slot: "XXIV", title: "Betrayer", author: "Aaron Dembski-Bowden", rating: 10, kind: "Novel", section: "Calth & Shadow Crusade", must: true, blurb: "Angron and Lorgar tearing Ultramar apart. Top-three book in the series." },
+  { slot: "XXV", title: "Mark of Calth", author: "Various", rating: 6, kind: "Anthology", section: "Calth & Shadow Crusade", blurb: "Calth aftermath shorts. Skippable, couple of decent ones." },
+
+  // MIDDLE / IMPERIUM SECUNDUS
+  { slot: "XXVI", title: "Vulkan Lives", author: "Nick Kyme", rating: 5, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "Curze torturing Vulkan for 400 pages. Skippable." },
+  { slot: "XXVII", title: "The Unremembered Empire", author: "Dan Abnett", rating: 8, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, must: true, blurb: "Guilliman builds a second Imperium; lost primarchs arrive — including Corax." },
+  { slot: "XXVIII", title: "Scars", author: "Chris Wraight", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, blurb: "The White Scars book everyone sleeps on. Wraight is quietly one of the series' best." },
+  { slot: "XXIX", title: "Vengeful Spirit", author: "Graham McNeill", rating: 6, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "Horus, Knights, Death Guard on Molech. Big Emperor-related reveal." },
+  { slot: "XXX", title: "The Damnation of Pythos", author: "David Annandale", rating: 3, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "Second-worst in the series. Skip." },
+  { slot: "XXXI", title: "Legacies of Betrayal", author: "Various", rating: 6, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Mixed bag. Pick through or skip." },
+  { slot: "XXXII", title: "Deathfire", author: "Nick Kyme", rating: 5, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, blurb: "Numeon (Raven Guard survivor) tries to return Vulkan's body home." },
+  { slot: "XXXIII", title: "War Without End", author: "Various", rating: 7, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Sisters of Silence and Custodes material stands out." },
+  { slot: "XXXIV", title: "Pharos", author: "Guy Haley", rating: 8, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, blurb: "Night Lords assault on the Pharos beacon. Corax appears. Dantioch is great." },
+  { slot: "XXXV", title: "Eye of Terra", author: "Various", rating: 7, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Mixed but has some real gems." },
+  { slot: "XXXVI", title: "The Path of Heaven", author: "Chris Wraight", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "White Scars' breakneck run to Terra. Wraight at his peak. Hidden highlight." },
+  { slot: "XXXVII", title: "The Silent War", author: "Various", rating: 7, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Sisters of Silence and Malcador's Knights-Errant." },
+  { slot: "XXXVIII", title: "Angels of Caliban", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, must: true, blurb: "Imperium Secundus concludes. Corax makes a defining decision." },
+  { slot: "XXXIX", title: "Praetorian of Dorn", author: "John French", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", must: true, blurb: "Alpha Legion vs Imperial Fists on Terra. Huge end-reveal." },
+
+  // LATE HERESY
+  { slot: "XL", title: "Corax", author: "Gav Thorpe", rating: 7, kind: "Anthology", section: "The Road to Terra", rg: true, must: true, blurb: "The Raven Guard anthology: Soulforge, Ravenlord, Weregeld, shorts. Your primary RG volume." },
+  { slot: "XLI", title: "The Master of Mankind", author: "Aaron Dembski-Bowden", rating: 9, kind: "Novel", section: "The Road to Terra", must: true, blurb: "The Emperor fighting the War in the Webway. Reframes everything." },
+  { slot: "XLII", title: "Garro", author: "James Swallow", rating: 8, kind: "Novel", section: "The Road to Terra", blurb: "Collected Garro audio dramas. If you liked Eisenstein, you'll love this." },
+  { slot: "XLIII", title: "Shattered Legions", author: "Various", rating: 7, kind: "Anthology", section: "The Road to Terra", rg: true, blurb: "Includes The Seventh Serpent (Raven Guard vs Alpha Legion)." },
+  { slot: "XLIV", title: "The Crimson King", author: "Graham McNeill", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "Magnus fragmented and searching. For Thousand Sons obsessives." },
+  { slot: "XLV", title: "Tallarn", author: "John French", rating: 7, kind: "Novel", section: "The Road to Terra", blurb: "The biggest tank battle in Imperial history." },
+  { slot: "XLVI", title: "Ruinstorm", author: "David Annandale", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "Imperium Secundus dissolves. Blood Angels' route to Terra." },
+  { slot: "XLVII", title: "Old Earth", author: "Nick Kyme", rating: 6, kind: "Novel", section: "The Road to Terra", rg: true, blurb: "Vulkan/Numeon continues with significant RG threads." },
+  { slot: "XLVIII", title: "The Burden of Loyalty", author: "Various", rating: 7, kind: "Anthology", section: "The Road to Terra", blurb: "Perpetual (Abnett, Oll Persson) is the standout." },
+  { slot: "XLIX", title: "Wolfsbane", author: "Guy Haley", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "Russ sent to kill Horus. Sets up a plot point that matters in Slaves to Darkness." },
+  { slot: "L", title: "Born of Flame", author: "Various", rating: 5, kind: "Anthology", section: "The Road to Terra", blurb: "Salamanders focus. Skippable." },
+  { slot: "LI", title: "Slaves to Darkness", author: "John French", rating: 9, kind: "Novel", section: "The Road to Terra", must: true, blurb: "Horus reuniting the traitor primarchs. The last pre-Siege book you cannot skip." },
+  { slot: "LII", title: "Heralds of the Siege", author: "Various", rating: 7, kind: "Anthology", section: "The Road to Terra", blurb: "Final run-up to Terra. Decent spread." },
+  { slot: "LIII", title: "Titandeath", author: "Guy Haley", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "The Beta-Garmon titan war. Concept better than execution." },
+  { slot: "LIV", title: "The Buried Dagger", author: "James Swallow", rating: 7, kind: "Novel", section: "The Road to Terra", blurb: "Mortarion's fall and Garro's final chapter. Better than its reputation." },
+
+  // SIEGE OF TERRA
+  { slot: "SoT 1", title: "The Solar War", author: "John French", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Horus breaches the Sol system. Void war, desperate defences." },
+  { slot: "★", title: "Sons of the Selenar", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", rg: true, blurb: "Raven Guard-led recovery mission on the moon. Between SoT 1 and SoT 2." },
+  { slot: "SoT 2", title: "The Lost and the Damned", author: "Guy Haley", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Siege begins properly. Horus's forces hit the walls." },
+  { slot: "SoT 3", title: "The First Wall", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Lion's Gate Spaceport. Solar Auxilia, Imperial Fists, Raven Guard." },
+  { slot: "SoT 4", title: "Saturnine", author: "Dan Abnett", rating: 10, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Possibly the best book in the entire series. Abnett at his absolute peak." },
+  { slot: "★", title: "Fury of Magnus", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", blurb: "Magnus vs the Emperor's Throne. Short, punchy, essential lore." },
+  { slot: "SoT 5", title: "Mortis", author: "John French", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Inner palace breached. Titans, Custodes, grinding attrition." },
+  { slot: "SoT 6", title: "Warhawk", author: "Chris Wraight", rating: 9, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "The Khan's last ride. Wraight gives the White Scars an ending that earns every tear." },
+  { slot: "SoT 7", title: "Echoes of Eternity", author: "Aaron Dembski-Bowden", rating: 9, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Sanguinius vs Ka'Bandha. Meaningful Raven Guard presence in the inner palace." },
+  { slot: "SoT 8", title: "The End and the Death: Volume I", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "The final act begins. Corax present in the inner sanctum." },
+  { slot: "SoT 9", title: "The End and the Death: Volume II", author: "Dan Abnett", rating: 8, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Middle volume drags in places but the reveals are huge." },
+  { slot: "SoT 10", title: "The End and the Death: Volume III", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "The duel. The death. The birth of 40K as we know it." },
+];
+
+// ============================================================
+// State + rendering
+// ============================================================
+const STORAGE_KEY = 'hh-reading-log-v1';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+
+function saveState(s) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch {}
+}
+
+let state = loadState();
+let currentFilter = 'all';
+
+// pre-mark books the user has already listened to (from Audible library screenshot)
+// only runs on first load / when state is completely empty
+const PRE_READ = [
+  "Horus Rising","False Gods","Galaxy in Flames","The Flight of the Eisenstein",
+  "Fulgrim","Legion","Mechanicum","Tales of Heresy","A Thousand Sons","Prospero Burns",
+  "The First Heretic","Deliverance Lost","Know No Fear","Fear to Tread","Angel Exterminatus",
+  "Betrayer","The Unremembered Empire","Pharos","Angels of Caliban","Praetorian of Dorn",
+  "Corax","The Master of Mankind","Garro","Slaves to Darkness","The Burden of Loyalty"
+];
+
+if (Object.keys(state).length === 0) {
+  PRE_READ.forEach(t => { state[t] = true; });
+  saveState(state);
+}
+
+function keyOf(b) { return b.title; }
+
+function bookMatchesFilter(b) {
+  const isRead = !!state[keyOf(b)];
+  switch (currentFilter) {
+    case 'all': return true;
+    case 'toread': return !isRead;
+    case 'read': return isRead;
+    case 'rg': return !!b.rg;
+    case 'must': return !!b.must;
+  }
+  return true;
+}
+
+function renderList() {
+  const root = document.getElementById('list');
+  root.innerHTML = '';
+
+  const visible = BOOKS.filter(bookMatchesFilter);
+
+  if (visible.length === 0) {
+    document.getElementById('empty').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('empty').classList.add('hidden');
+
+  let currentSection = null;
+  visible.forEach((b, idx) => {
+    if (b.section !== currentSection) {
+      currentSection = b.section;
+      const h = document.createElement('h2');
+      h.className = 'section-head';
+      const sectionBooks = visible.filter(x => x.section === b.section);
+      const sectionRead = sectionBooks.filter(x => state[keyOf(x)]).length;
+      h.innerHTML = `${b.section}<span class="tag">${sectionRead} / ${sectionBooks.length}</span>`;
+      root.appendChild(h);
+    }
+
+    const row = document.createElement('article');
+    row.className = 'book' + (state[keyOf(b)] ? ' read' : '');
+    row.innerHTML = `
+      <div class="slot">${b.slot}</div>
+      <div class="book-body">
+        <div class="book-title-row">
+          <span class="book-title">${b.title}</span>
+          <span class="book-author">${b.author}</span>
+        </div>
+        <div class="book-blurb">${b.blurb}</div>
+        <div class="book-meta">
+          <span class="rating">${b.rating}/10</span>
+          <span class="kind">${b.kind}</span>
+          ${b.must ? '<span class="must">Must-read</span>' : ''}
+          ${b.rg ? '<span class="rg">Raven Guard</span>' : ''}
+        </div>
+      </div>
+      <label class="check">
+        <input type="checkbox" ${state[keyOf(b)] ? 'checked' : ''} data-title="${b.title.replace(/"/g,'&quot;')}" />
+      </label>
+    `;
+    root.appendChild(row);
+  });
+
+  // wire up checkboxes
+  root.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      const title = e.target.dataset.title;
+      if (e.target.checked) state[title] = true;
+      else delete state[title];
+      saveState(state);
+      renderAll();
+    });
+  });
+}
+
+function renderStats() {
+  const total = BOOKS.length;
+  const read = BOOKS.filter(b => state[keyOf(b)]).length;
+  const pct = total ? Math.round((read / total) * 100) : 0;
+  document.getElementById('progress-count').textContent = read;
+  document.getElementById('progress-total').textContent = total;
+  document.getElementById('progress-pct').textContent = pct + '% complete';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  document.getElementById('count-all').textContent = total;
+  document.getElementById('count-toread').textContent = BOOKS.filter(b => !state[keyOf(b)]).length;
+  document.getElementById('count-read').textContent = read;
+  document.getElementById('count-rg').textContent = BOOKS.filter(b => b.rg).length;
+  document.getElementById('count-must').textContent = BOOKS.filter(b => b.must).length;
+}
+
+function renderAll() { renderStats(); renderList(); }
+
+document.querySelectorAll('.filters button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderList();
+  });
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (confirm('Reset all reading progress? This cannot be undone.')) {
+    state = {};
+    saveState(state);
+    renderAll();
+  }
+});
+
+document.getElementById('export-btn').addEventListener('click', () => {
+  const read = BOOKS.filter(b => state[keyOf(b)]).map(b => `[x] ${b.slot} · ${b.title} — ${b.author}`);
+  const unread = BOOKS.filter(b => !state[keyOf(b)]).map(b => `[ ] ${b.slot} · ${b.title} — ${b.author}`);
+  const text = `HORUS HERESY — READING LOG\n\nRead (${read.length}):\n${read.join('\n')}\n\nTo read (${unread.length}):\n${unread.join('\n')}`;
+  navigator.clipboard?.writeText(text).then(() => alert('Copied to clipboard.'), () => {
+    // fallback
+    const w = window.open('', '_blank');
+    w.document.write('<pre>' + text.replace(/</g,'&lt;') + '</pre>');
+  });
+});
+
+renderAll();
+</script>
+</body>
+</html>
