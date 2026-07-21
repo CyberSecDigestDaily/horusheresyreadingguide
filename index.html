@@ -3,42 +3,61 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Horus Heresy — Reading Log</title>
+<title>The Horus Heresy — A Reading Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
-     THEMES — high contrast, WCAG AA+ on body text
+     PALETTES
+       Dark  = Imperium of Man (obsidian, bone, aquila gold, crimson)
+       Light = Parchment (aged vellum, iron-gall ink, rubrication red)
      ============================================================ */
+
   :root[data-theme="dark"] {
-    --bg: #0f0d0b;
-    --bg-raised: #1a1613;
-    --ink: #f5efe0;             /* ~15:1 on bg — near white */
-    --ink-dim: #d4c9ae;         /* ~10:1 on bg — very readable blurbs */
-    --ink-meta: #a89a7c;        /* ~5:1 on bg — meta labels */
-    --ink-faint: #7a6f58;       /* dim ornamentation */
-    --rule: #3a322a;
-    --accent: #d99a4a;          /* brighter copper for dark bg */
-    --accent-soft: #a06e2f;
-    --raven: #8fb0d4;           /* brighter cornflower on dark */
-    --read-tint: #7a6f58;
-    --check-tick: #0f0d0b;
+    --bg:          #08070a;      /* deep obsidian, faint blue-black */
+    --bg-raised:   #12100e;
+    --ink:         #efe6cf;      /* warm bone/ivory — ~16:1 on bg */
+    --ink-dim:     #c9bda1;      /* aged parchment — ~11:1 */
+    --ink-meta:    #9a8e70;      /* faded gilt — ~5.5:1 */
+    --ink-faint:   #665c48;
+    --rule:        #3a3020;      /* warm bronze rule */
+    --rule-soft:   #221c14;
+    --accent:      #c9a24a;      /* aquila gold */
+    --accent-hi:   #e7c069;      /* burnished gold highlight */
+    --accent-soft: #8a6c26;
+    --crimson:     #a52a2a;      /* Imperial crimson — must-read / warnings */
+    --raven:       #9db2ce;      /* silver-blue for RG mark */
+    --read-tint:   #6a6250;
+    --check-tick:  #08070a;
+    --paper-grain: none;
+    --vignette:
+      radial-gradient(ellipse 90% 60% at 50% 0%, rgba(201, 162, 74, 0.07), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(165, 42, 42, 0.04), transparent 60%);
   }
 
   :root[data-theme="light"] {
-    --bg: #f4efe2;
-    --bg-raised: #ebe4d2;
-    --ink: #14110d;             /* ~16:1 on bg — near black */
-    --ink-dim: #3d3628;         /* ~10:1 on bg */
-    --ink-meta: #6a5d43;        /* ~5:1 on bg */
-    --ink-faint: #8a7d63;
-    --rule: #d0c4a3;
-    --accent: #8a4315;          /* dark copper — high contrast on cream */
-    --accent-soft: #6a3410;
-    --raven: #2f4160;
-    --read-tint: #8a7d63;
-    --check-tick: #f4efe2;
+    --bg:          #ede1c2;      /* aged vellum */
+    --bg-raised:   #e3d5b0;
+    --ink:         #2a1a0c;      /* iron gall ink — ~14:1 on bg */
+    --ink-dim:     #4a3620;      /* faded ink — ~9:1 */
+    --ink-meta:    #6b502e;      /* faded gilt — ~5.5:1 */
+    --ink-faint:   #907450;
+    --rule:        #b8a37a;
+    --rule-soft:   #d3c197;
+    --accent:      #8a1e14;      /* vermillion — medieval rubrication */
+    --accent-hi:   #a52a1a;
+    --accent-soft: #6a1810;
+    --crimson:     #8a1e14;
+    --raven:       #2a3c58;      /* deep manuscript ultramarine */
+    --read-tint:   #a08967;
+    --check-tick:  #ede1c2;
+    /* subtle paper grain — dark warm noise, very low alpha */
+    --paper-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.06  0 0 0 0 0.03  0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    --vignette:
+      radial-gradient(ellipse 80% 50% at 25% 15%, rgba(120, 70, 30, 0.06), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 80% 85%, rgba(120, 70, 30, 0.05), transparent 55%),
+      radial-gradient(ellipse 100% 30% at 50% 100%, rgba(80, 50, 20, 0.06), transparent 60%);
   }
 
   * { box-sizing: border-box; }
@@ -50,29 +69,38 @@
     color: var(--ink);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.25s ease, color 0.25s ease;
   }
 
   body {
-    background-image:
-      radial-gradient(ellipse at top, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 60%);
+    background-image: var(--vignette), var(--paper-grain);
+    background-repeat: no-repeat, repeat;
+    background-attachment: fixed, fixed;
     min-height: 100vh;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
   }
 
   .wrap {
     max-width: 880px;
     margin: 0 auto;
-    padding: 48px 24px 96px;
+    padding: 56px 28px 96px;
   }
 
+  /* ============================================================
+     HEADER
+     ============================================================ */
   header {
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 32px;
-    margin-bottom: 32px;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
     position: relative;
+    border-bottom: 1px solid var(--rule);
   }
 
   .theme-toggle {
@@ -82,13 +110,14 @@
     background: transparent;
     border: 1px solid var(--rule);
     color: var(--ink-dim);
-    padding: 8px 14px;
+    padding: 9px 16px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    font-weight: 500;
   }
 
   .theme-toggle:hover {
@@ -96,51 +125,72 @@
     border-color: var(--accent);
   }
 
+  .frontispiece {
+    text-align: center;
+    margin-bottom: 28px;
+    color: var(--accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    letter-spacing: 0.6em;
+    padding-left: 0.6em;
+    opacity: 0.85;
+  }
+
   .eyebrow {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
+    font-size: 10.5px;
+    letter-spacing: 0.32em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 12px;
+    margin-bottom: 18px;
     font-weight: 500;
+    text-align: center;
   }
 
   h1 {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 500;
-    font-size: clamp(38px, 6vw, 56px);
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    margin: 0 0 12px;
     font-style: italic;
-    color: var(--ink);
+    font-size: clamp(42px, 6.4vw, 64px);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    margin: 0 0 18px;
+    color: var(--accent);
+    text-align: center;
   }
 
   .subtitle {
     color: var(--ink-dim);
-    font-size: 15px;
-    max-width: 60ch;
-    margin: 0;
-    line-height: 1.55;
+    font-size: 15.5px;
+    max-width: 58ch;
+    margin: 0 auto;
+    line-height: 1.6;
+    text-align: center;
   }
 
-  .subtitle .rg-dot { color: var(--raven); font-weight: 600; }
+  .subtitle .rg-dot {
+    color: var(--raven);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
 
   .progress-block {
     display: flex;
     align-items: baseline;
-    gap: 24px;
-    margin-top: 32px;
+    gap: 28px;
+    margin-top: 40px;
     flex-wrap: wrap;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule-soft);
   }
 
   .progress-num {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 46px;
+    font-size: 50px;
     font-weight: 500;
     color: var(--ink);
     line-height: 1;
+    font-feature-settings: "lnum" 1;
   }
 
   .progress-num em {
@@ -149,39 +199,44 @@
     font-weight: 600;
   }
 
-  .progress-num .sep { color: var(--ink-faint); }
+  .progress-num .sep {
+    color: var(--ink-faint);
+    margin: 0 4px;
+  }
 
   .progress-bar {
     flex: 1;
     min-width: 200px;
-    height: 3px;
-    background: var(--rule);
+    height: 2px;
+    background: var(--rule-soft);
     position: relative;
     overflow: hidden;
-    border-radius: 2px;
   }
 
   .progress-bar > span {
     display: block;
     height: 100%;
-    background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+    background: linear-gradient(90deg, var(--accent-soft), var(--accent), var(--accent-hi));
     width: 0%;
-    transition: width 0.4s ease;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .progress-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--ink-meta);
     font-weight: 500;
   }
 
+  /* ============================================================
+     FILTERS
+     ============================================================ */
   .filters {
     display: flex;
-    gap: 4px;
-    margin: 32px 0 20px;
+    gap: 2px;
+    margin: 40px 0 24px;
     flex-wrap: wrap;
     border-bottom: 1px solid var(--rule);
   }
@@ -190,14 +245,14 @@
     background: none;
     border: none;
     color: var(--ink-meta);
-    padding: 10px 14px;
+    padding: 12px 16px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     cursor: pointer;
     position: relative;
-    transition: color 0.15s ease;
+    transition: color 0.2s ease;
     margin-bottom: -1px;
     font-weight: 500;
   }
@@ -211,41 +266,60 @@
 
   .filters button .count {
     color: var(--ink-faint);
-    margin-left: 6px;
+    margin-left: 8px;
     font-weight: 400;
   }
 
+  /* ============================================================
+     SECTIONS + BOOKS
+     ============================================================ */
   .section-head {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-style: italic;
     font-weight: 500;
-    font-size: 24px;
+    font-size: 28px;
     color: var(--ink);
-    margin: 40px 0 12px;
-    padding-bottom: 8px;
+    margin: 52px 0 8px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--rule);
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 12px;
+    gap: 16px;
+    letter-spacing: -0.005em;
+  }
+
+  .section-head::before {
+    content: "❦";
+    color: var(--accent);
+    font-style: normal;
+    margin-right: 14px;
+    font-size: 22px;
+    display: inline-block;
+    transform: translateY(-2px);
+  }
+
+  .section-head .title-text {
+    flex: 1;
   }
 
   .section-head .tag {
     font-family: 'JetBrains Mono', monospace;
     font-style: normal;
     font-size: 10px;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--ink-meta);
     font-weight: 500;
+    white-space: nowrap;
   }
 
   .book {
     display: grid;
-    grid-template-columns: 48px 1fr auto;
-    gap: 16px;
-    padding: 18px 0;
-    border-bottom: 1px solid var(--rule);
+    grid-template-columns: 56px 1fr auto;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule-soft);
     align-items: start;
     transition: opacity 0.2s ease;
   }
@@ -254,13 +328,15 @@
 
   .slot {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 19px;
-    color: var(--ink-meta);
-    padding-top: 2px;
+    font-size: 22px;
+    color: var(--accent);
+    padding-top: 3px;
     text-align: right;
-    font-feature-settings: "onum" 1;
     font-variant-numeric: oldstyle-nums;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-style: italic;
+    line-height: 1;
   }
 
   .book-body { min-width: 0; }
@@ -268,7 +344,7 @@
   .book-title-row {
     display: flex;
     align-items: baseline;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 6px;
   }
@@ -276,67 +352,89 @@
   .book-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: 21px;
+    font-size: 22px;
     color: var(--ink);
     line-height: 1.2;
+    letter-spacing: -0.005em;
   }
 
   .book-author {
     color: var(--ink-dim);
     font-size: 14px;
     font-style: italic;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+  }
+
+  .book-author::before {
+    content: "— ";
+    color: var(--ink-faint);
   }
 
   .book-blurb {
     color: var(--ink-dim);
-    font-size: 14.5px;
-    line-height: 1.55;
-    margin-top: 4px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-top: 6px;
   }
 
   .book-meta {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin-top: 12px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.1em;
+    font-size: 10px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--ink-meta);
     font-weight: 500;
+    align-items: center;
   }
 
-  .book-meta .rating { color: var(--accent); font-weight: 600; }
+  .book-meta .rating {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
   .book-meta .rg {
     color: var(--raven);
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     font-weight: 600;
   }
-  .book-meta .rg::before { content: "◆"; font-size: 8px; }
-  .book-meta .must { color: var(--accent); font-weight: 600; }
+  .book-meta .rg::before { content: "◆"; font-size: 7px; }
+
+  .book-meta .must {
+    color: var(--crimson);
+    font-weight: 600;
+  }
+  .book-meta .must::before {
+    content: "✦";
+    margin-right: 5px;
+    font-size: 9px;
+  }
 
   /* checkbox */
   .check {
     grid-column: 3;
     grid-row: 1 / span 2;
     align-self: start;
-    padding-top: 4px;
+    padding-top: 6px;
   }
 
   .check input {
     appearance: none;
     -webkit-appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border: 1.5px solid var(--ink-meta);
     background: transparent;
     cursor: pointer;
     position: relative;
     transition: border-color 0.15s ease, background 0.15s ease;
-    border-radius: 2px;
   }
 
   .check input:hover { border-color: var(--accent); }
@@ -349,10 +447,10 @@
   .check input:checked::after {
     content: "";
     position: absolute;
-    left: 7px;
+    left: 8px;
     top: 3px;
     width: 6px;
-    height: 12px;
+    height: 13px;
     border: solid var(--check-tick);
     border-width: 0 2.5px 2.5px 0;
     transform: rotate(45deg);
@@ -360,11 +458,17 @@
 
   .check input:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 
-  /* read state — still readable, just clearly de-emphasised */
-  .book.read .book-title { color: var(--read-tint); font-style: italic; }
+  /* read state — struck through with rubrication line */
+  .book.read .book-title {
+    color: var(--read-tint);
+    font-style: italic;
+    text-decoration: line-through;
+    text-decoration-color: var(--accent-soft);
+    text-decoration-thickness: 1px;
+  }
   .book.read .slot { color: var(--read-tint); }
   .book.read .book-author,
   .book.read .book-blurb { color: var(--read-tint); }
@@ -372,18 +476,37 @@
   .book.read .book-meta .rating,
   .book.read .book-meta .rg,
   .book.read .book-meta .must { color: var(--read-tint); font-weight: 500; }
+  .book.read .book-meta .must::before,
+  .book.read .book-meta .rg::before { color: var(--read-tint); }
 
+  /* ============================================================
+     FOOTER
+     ============================================================ */
   footer {
-    margin-top: 64px;
-    padding-top: 24px;
+    margin-top: 72px;
+    padding-top: 32px;
     border-top: 1px solid var(--rule);
+    text-align: center;
+  }
+
+  .footer-ornament {
+    color: var(--accent);
+    font-size: 20px;
+    letter-spacing: 0.8em;
+    padding-left: 0.8em;
+    margin-bottom: 24px;
+    opacity: 0.75;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .footer-row {
     display: flex;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--ink-meta);
     align-items: center;
@@ -393,13 +516,13 @@
     background: none;
     border: 1px solid var(--rule);
     color: var(--ink-dim);
-    padding: 8px 14px;
+    padding: 9px 16px;
     font-family: inherit;
     font-size: inherit;
     letter-spacing: inherit;
     text-transform: inherit;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color 0.2s ease, border-color 0.2s ease;
     font-weight: 500;
   }
 
@@ -408,25 +531,39 @@
     border-color: var(--accent);
   }
 
+  .footer-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 13px;
+    color: var(--ink-faint);
+    text-align: center;
+    margin-top: 20px;
+  }
+
   .hidden { display: none !important; }
 
   .empty {
     text-align: center;
-    padding: 48px 0;
+    padding: 56px 0;
     color: var(--ink-meta);
     font-style: italic;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
+    font-size: 22px;
   }
 
-  @media (max-width: 600px) {
-    .wrap { padding: 32px 18px 64px; }
-    .theme-toggle { position: static; margin-bottom: 16px; }
-    .book { grid-template-columns: 34px 1fr auto; gap: 12px; padding: 16px 0; }
-    .slot { font-size: 16px; }
-    .book-title { font-size: 18px; }
-    .book-blurb { font-size: 13.5px; }
-    h1 { font-size: 38px; }
+  @media (max-width: 640px) {
+    .wrap { padding: 36px 20px 72px; }
+    .theme-toggle { position: static; display: block; margin: 0 auto 24px; }
+    .frontispiece { margin-top: 12px; }
+    .book { grid-template-columns: 38px 1fr auto; gap: 14px; padding: 18px 0; }
+    .slot { font-size: 17px; padding-top: 4px; }
+    .book-title { font-size: 18.5px; }
+    .book-blurb { font-size: 14px; }
+    .section-head { font-size: 22px; }
+    .section-head::before { font-size: 18px; margin-right: 10px; }
+    h1 { font-size: 42px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -441,13 +578,14 @@
 <div class="wrap">
 
   <header>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☾ Dark</button>
-    <div class="eyebrow">Warhammer 40,000 · Black Library</div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☀ Parchment</button>
+    <div class="frontispiece">❦ ❦ ❦</div>
+    <div class="eyebrow">Warhammer 40,000 &nbsp;·&nbsp; Black Library</div>
     <h1>The Horus Heresy</h1>
-    <p class="subtitle">Reading log in recommended order. Ratings out of 10. <span class="rg-dot">◆</span> marks Raven Guard content worth reading regardless of rating.</p>
+    <p class="subtitle">A reading log in recommended order. Ratings out of ten. <span class="rg-dot">◆</span> marks Raven Guard content worth reading regardless of rating.</p>
 
     <div class="progress-block">
-      <div class="progress-num"><em id="progress-count">0</em> <span class="sep">/</span> <span id="progress-total">0</span></div>
+      <div class="progress-num"><em id="progress-count">0</em><span class="sep">/</span><span id="progress-total">0</span></div>
       <div class="progress-bar"><span id="progress-fill"></span></div>
       <div class="progress-label" id="progress-pct">0% complete</div>
     </div>
@@ -463,14 +601,18 @@
 
   <main id="list"></main>
 
-  <div class="empty hidden" id="empty">Nothing here — try a different filter.</div>
+  <div class="empty hidden" id="empty">The record is empty. Change your filter.</div>
 
   <footer>
-    <div>Local save · your browser only</div>
-    <div style="display:flex; gap:8px;">
-      <button id="export-btn">Export</button>
-      <button id="reset-btn">Reset</button>
+    <div class="footer-ornament">❦ ❦ ❦</div>
+    <div class="footer-row">
+      <div>Local save · your browser only</div>
+      <div style="display:flex; gap:10px;">
+        <button id="export-btn">Export</button>
+        <button id="reset-btn">Reset</button>
+      </div>
     </div>
+    <div class="footer-tag">The Emperor Protects</div>
   </footer>
 
 </div>
@@ -483,7 +625,7 @@ const THEME_KEY = 'hh-theme';
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
   const btn = document.getElementById('theme-toggle');
-  btn.textContent = t === 'dark' ? '☾ Dark' : '☀ Light';
+  btn.textContent = t === 'dark' ? '☀ Parchment' : '☾ Imperium';
   try { localStorage.setItem(THEME_KEY, t); } catch {}
 }
 (function initTheme(){
@@ -522,7 +664,7 @@ const BOOKS = [
   { slot: "XVI", title: "Age of Darkness", author: "Various", rating: 7, kind: "Anthology", section: "The Second Wave", rg: true, blurb: "Read for The Face of Treachery (first post-Isstvaan Raven Guard) and Abnett/ADB shorts." },
   { slot: "XVII", title: "The Outcast Dead", author: "Graham McNeill", rating: 6, kind: "Novel", section: "The Second Wave", blurb: "Traitor marines trapped on Terra when the news breaks." },
 
-  { slot: "★", title: "Raven's Flight", author: "Gav Thorpe", rating: 8, kind: "Audio drama", section: "Raven Guard Detour", rg: true, blurb: "Corax's escape from Isstvaan V. Also included in Shadows of Treachery." },
+  { slot: "✦", title: "Raven's Flight", author: "Gav Thorpe", rating: 8, kind: "Audio drama", section: "Raven Guard Detour", rg: true, blurb: "Corax's escape from Isstvaan V. Also included in Shadows of Treachery." },
   { slot: "XVIII", title: "Deliverance Lost", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "Raven Guard Detour", rg: true, blurb: "The primary Raven Guard novel. Corax returns to Deliverance with Emperor's gene-tech; Alpha Legion has its fingers everywhere." },
 
   { slot: "XIX", title: "Know No Fear", author: "Dan Abnett", rating: 10, kind: "Novel", section: "Calth & Shadow Crusade", must: true, blurb: "The Battle of Calth. Minute-by-minute. Abnett's best structural experiment." },
@@ -565,11 +707,11 @@ const BOOKS = [
   { slot: "LIV", title: "The Buried Dagger", author: "James Swallow", rating: 7, kind: "Novel", section: "The Road to Terra", blurb: "Mortarion's fall and Garro's final chapter. Better than its reputation." },
 
   { slot: "SoT 1", title: "The Solar War", author: "John French", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Horus breaches the Sol system. Void war, desperate defences." },
-  { slot: "★", title: "Sons of the Selenar", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", rg: true, blurb: "Raven Guard-led recovery mission on the moon. Between SoT 1 and SoT 2." },
+  { slot: "✦", title: "Sons of the Selenar", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", rg: true, blurb: "Raven Guard-led recovery mission on the moon. Between SoT 1 and SoT 2." },
   { slot: "SoT 2", title: "The Lost and the Damned", author: "Guy Haley", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Siege begins properly. Horus's forces hit the walls." },
   { slot: "SoT 3", title: "The First Wall", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Lion's Gate Spaceport. Solar Auxilia, Imperial Fists, Raven Guard." },
   { slot: "SoT 4", title: "Saturnine", author: "Dan Abnett", rating: 10, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Possibly the best book in the entire series. Abnett at his absolute peak." },
-  { slot: "★", title: "Fury of Magnus", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", blurb: "Magnus vs the Emperor's Throne. Short, punchy, essential lore." },
+  { slot: "✦", title: "Fury of Magnus", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", blurb: "Magnus vs the Emperor's Throne. Short, punchy, essential lore." },
   { slot: "SoT 5", title: "Mortis", author: "John French", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Inner palace breached. Titans, Custodes, grinding attrition." },
   { slot: "SoT 6", title: "Warhawk", author: "Chris Wraight", rating: 9, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "The Khan's last ride. Wraight gives the White Scars an ending that earns every tear." },
   { slot: "SoT 7", title: "Echoes of Eternity", author: "Aaron Dembski-Bowden", rating: 9, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Sanguinius vs Ka'Bandha. Meaningful Raven Guard presence in the inner palace." },
@@ -644,7 +786,7 @@ function renderList() {
       h.className = 'section-head';
       const sectionBooks = visible.filter(x => x.section === b.section);
       const sectionRead = sectionBooks.filter(x => state[keyOf(x)]).length;
-      h.innerHTML = `${b.section}<span class="tag">${sectionRead} / ${sectionBooks.length}</span>`;
+      h.innerHTML = `<span class="title-text">${b.section}</span><span class="tag">${sectionRead} / ${sectionBooks.length}</span>`;
       root.appendChild(h);
     }
 
@@ -659,7 +801,7 @@ function renderList() {
         </div>
         <div class="book-blurb">${b.blurb}</div>
         <div class="book-meta">
-          <span class="rating">${b.rating}/10</span>
+          <span class="rating">${b.rating} / 10</span>
           <span class="kind">${b.kind}</span>
           ${b.must ? '<span class="must">Must-read</span>' : ''}
           ${b.rg ? '<span class="rg">Raven Guard</span>' : ''}
