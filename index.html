@@ -1,820 +1,1274 @@
 <!doctype html>
-<html lang="en-GB" data-theme="dark">
+<html lang="en-GB">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The Horus Heresy — A Reading Log</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="The Horus Heresy and the Siege of Terra in reading order, with a verdict and score for every book, progress tracking and a Raven Guard path.">
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2032%2032'%3E%3Crect%20width%3D'32'%20height%3D'32'%20fill%3D'%230b0b0b'%2F%3E%3Cpath%20d%3D'M9%206h3.2v6.6h7.6V6H23v15h-3.2v-5.4h-7.6V21H9z'%20fill%3D'%23f4f4f1'%2F%3E%3Crect%20x%3D'9'%20y%3D'24'%20width%3D'14'%20height%3D'2.6'%20fill%3D'%23c10f1c'%2F%3E%3C%2Fsvg%3E">
+<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}img{max-width:100%}</style>
+<title>Horus Heresy Reading Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  /* ============================================================
-     PALETTES
-       Dark  = Imperium (obsidian, bone, aquila gold, crimson)
-       Light = Parchment (aged vellum, iron-gall ink, rubrication)
-     All textures are pure CSS gradients — no external resources.
-     ============================================================ */
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&amp;family=Barlow+Condensed:wght@600;700&amp;family=Barlow+Semi+Condensed:wght@600;700&amp;display=swap">
+<style id="hh-css">
+/* Layout: storefront. A black masthead (status strip, hero statement, progress figure), two
+   "continue" cards lifted over its lower edge, a sticky uppercase tab bar, then the catalogue:
+   number tile | title, blurb, chips | tick. Monochrome and square-cornered, with one red for
+   essentials and live status, and steel blue for the Raven Guard. */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --sunk: #f4f4f2;
+  --tile: #ebebe7;
+  --ink: #121211;
+  --ink-2: #3e3e3a;
+  --ink-3: #6a6a64;
+  --rule: #dcdcd6;
+  --mast: #0b0b0b;
+  --mast-2: #191918;
+  --mast-ink: #f4f4f1;
+  --mast-ink-2: #a3a39d;
+  --mast-rule: #2c2c2a;
+  --mast-mark: rgba(255, 255, 255, 0.075);
+  --accent: #c10f1c;
+  --ess-bg: #c10f1c;
+  --ess-ink: #ffffff;
+  --btn: #121211;
+  --btn-ink: #ffffff;
+  --done-bg: #121211;
+  --done-ink: #ffffff;
+  --done-ink-2: #8d8d87;
+  --listen-bg: #fcf1f1;
+  --raven: #26466a;
+  --raven-bg: #e3eaf2;
+  --raven-ink: #ffffff;
+  --ok: #2f8a57;
+  --focus: #c10f1c;
+  --lift: 0 22px 44px -28px rgba(0, 0, 0, 0.5);
+  --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-ui: "Barlow Semi Condensed", "Barlow", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --max: 1080px;
+  --gutter: 24px;
+  --sticky-top: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e0e0d;
+    --surface: #151514;
+    --sunk: #1b1b19;
+    --tile: #232321;
+    --ink: #f2f2ee;
+    --ink-2: #c8c8c2;
+    --ink-3: #93938d;
+    --rule: #2e2e2c;
+    --mast: #000000;
+    --mast-2: #121211;
+    --mast-ink: #f4f4f1;
+    --mast-ink-2: #9c9c96;
+    --mast-rule: #272725;
+    --mast-mark: rgba(255, 255, 255, 0.06);
+    --accent: #f0434e;
+    --ess-bg: #cc1f2b;
+    --ess-ink: #ffffff;
+    --btn: #f2f2ee;
+    --btn-ink: #0e0e0d;
+    --done-bg: #f2f2ee;
+    --done-ink: #0e0e0d;
+    --done-ink-2: #6c6c66;
+    --listen-bg: #261619;
+    --raven: #a9c0dc;
+    --raven-bg: #1b2533;
+    --raven-ink: #0e0e0d;
+    --ok: #46b274;
+    --focus: #f2f2ee;
+    --lift: 0 22px 44px -26px rgba(0, 0, 0, 0.95);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e0e0d;
+  --surface: #151514;
+  --sunk: #1b1b19;
+  --tile: #232321;
+  --ink: #f2f2ee;
+  --ink-2: #c8c8c2;
+  --ink-3: #93938d;
+  --rule: #2e2e2c;
+  --mast: #000000;
+  --mast-2: #121211;
+  --mast-ink: #f4f4f1;
+  --mast-ink-2: #9c9c96;
+  --mast-rule: #272725;
+  --mast-mark: rgba(255, 255, 255, 0.06);
+  --accent: #f0434e;
+  --ess-bg: #cc1f2b;
+  --ess-ink: #ffffff;
+  --btn: #f2f2ee;
+  --btn-ink: #0e0e0d;
+  --done-bg: #f2f2ee;
+  --done-ink: #0e0e0d;
+  --done-ink-2: #6c6c66;
+  --listen-bg: #261619;
+  --raven: #a9c0dc;
+  --raven-bg: #1b2533;
+  --raven-ink: #0e0e0d;
+  --ok: #46b274;
+  --focus: #f2f2ee;
+  --lift: 0 22px 44px -26px rgba(0, 0, 0, 0.95);
+  color-scheme: dark;
+}
 
-  :root[data-theme="dark"] {
-    --bg:          #0a0908;
-    --ink:         #f0e7d0;   /* warm bone — ~16:1 */
-    --ink-dim:     #cec19f;   /* aged parchment — ~11:1 */
-    --ink-meta:    #a4977b;   /* faded gilt — ~6:1 */
-    --ink-faint:   #6e6450;
-    --rule:        #39301f;
-    --rule-soft:   #241e14;
-    --accent:      #c9a24a;   /* aquila gold */
-    --accent-hi:   #e7c069;
-    --accent-soft: #8a6c26;
-    --crimson:     #c0392b;   /* imperial crimson, brightened for dark bg */
-    --raven:       #a3b8d4;   /* silver-blue */
-    --read-tint:   #8a8069;
-    --check-tick:  #0a0908;
-    --page-texture:
-      radial-gradient(ellipse 80% 55% at 50% -5%, rgba(201,162,74,0.08), transparent 62%),
-      radial-gradient(ellipse 70% 45% at 50% 105%, rgba(192,57,43,0.05), transparent 60%),
-      linear-gradient(180deg, rgba(231,192,105,0.02), transparent 26%);
-  }
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; background: var(--mast); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+b, strong { font-weight: 600; }
+::selection { background: var(--ink); color: var(--bg); }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.strip-in, .hero-in, .main, .tabs-in, .foot-in { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
 
-  :root[data-theme="light"] {
-    --bg:          #f1e7cd;   /* aged vellum */
-    --ink:         #251a0d;   /* iron-gall ink — ~13:1 */
-    --ink-dim:     #42311d;   /* faded ink — ~9.5:1 */
-    --ink-meta:    #66512f;   /* ~6:1 */
-    --ink-faint:   #8f7852;
-    --rule:        #c2ad82;
-    --rule-soft:   #d9caa5;
-    --accent:      #8e2012;   /* vermillion rubrication */
-    --accent-hi:   #a5301b;
-    --accent-soft: #6f180d;
-    --crimson:     #8e2012;
-    --raven:       #2c3e5c;   /* manuscript ultramarine */
-    --read-tint:   #7c6647;
-    --check-tick:  #f6eeda;
-    --page-texture:
-      radial-gradient(ellipse 55% 42% at 10% 6%, rgba(122,84,40,0.09), transparent 62%),
-      radial-gradient(ellipse 48% 40% at 94% 12%, rgba(122,84,40,0.06), transparent 60%),
-      radial-gradient(ellipse 55% 45% at 88% 94%, rgba(122,84,40,0.08), transparent 62%),
-      radial-gradient(ellipse 140% 95% at 50% 50%, transparent 58%, rgba(92,62,26,0.10) 100%),
-      repeating-linear-gradient(0deg, rgba(92,62,26,0.03) 0 1px, transparent 1px 24px);
-  }
+/* ---------- Status strip ---------- */
+.strip { background: var(--mast); color: var(--mast-ink-2); border-bottom: 1px solid var(--mast-rule); }
+.strip-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.strip-label { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--mast-ink); }
+.strip-tools { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.sync-chip { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.sync-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mast-ink-2); flex: none; }
+.sync-chip.on .dot { background: var(--ok); }
+.sync-chip a { color: var(--mast-ink); text-decoration: underline; text-underline-offset: 3px; }
+.theme-btn { display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 10px; background: transparent; border: 1px solid var(--mast-rule); color: var(--mast-ink); cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }
+.theme-btn svg { width: 14px; height: 14px; flex: none; }
 
-  * { box-sizing: border-box; }
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; overflow: hidden; color: var(--mast-ink);
+  background-color: var(--mast);
+  background-image: radial-gradient(90% 140% at 92% 0%, var(--mast-2) 0%, transparent 62%);
+}
+.hero-in { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 32px 56px; align-items: end; padding-block: 64px 116px; }
+.hero-text { min-width: 0; }
+.eyebrow { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font-family: var(--font-ui); font-weight: 600; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--mast-ink-2); }
+.eyebrow::before { content: ""; width: 40px; height: 3px; background: var(--accent); flex: none; }
+.hero h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(54px, 8.6vw, 108px); line-height: .86; letter-spacing: .004em; text-transform: uppercase; text-wrap: balance; }
+.hero-lede { margin: 24px 0 0; max-width: 46ch; font-size: 17px; line-height: 1.55; color: var(--mast-ink-2); }
+.hero-stat { min-width: 0; padding-left: 40px; border-left: 1px solid var(--mast-rule); }
+.stat-label { margin: 0 0 12px; font-family: var(--font-ui); font-weight: 600; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--mast-ink-2); }
+.big { font-family: var(--font-display); font-weight: 600; font-size: clamp(76px, 9.4vw, 128px); line-height: .82; letter-spacing: -.01em; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+.big .of { margin-left: .06em; font-size: .4em; font-weight: 600; letter-spacing: 0; color: var(--mast-ink-2); }
+.prog-label { margin: 18px 0 12px; font-size: 15px; color: var(--mast-ink-2); }
+.prog-label strong { color: var(--mast-ink); }
+.bar { height: 4px; background: var(--tile); overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--ink); transition: width .4s ease; }
+.hero .bar { background: var(--mast-rule); }
+.hero .bar > span { background: var(--mast-ink); }
+.mini-stats { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 16px; font-size: 14px; color: var(--mast-ink-2); font-variant-numeric: tabular-nums; }
+.mini-stats b { color: var(--mast-ink); }
+.hero-mark { position: absolute; z-index: 0; right: -.03em; bottom: -.2em; margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(160px, 24vw, 300px); line-height: 1; letter-spacing: -.02em; white-space: nowrap; color: transparent; -webkit-text-stroke: 1.5px var(--mast-mark); pointer-events: none; user-select: none; }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg);
-    color: var(--ink);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    transition: background-color 0.25s ease, color 0.25s ease;
-  }
+/* ---------- Buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; font-family: var(--font-ui); font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; transition: background-color .15s, color .15s, border-color .15s; }
+.btn.primary { background: var(--btn); border-color: var(--btn); color: var(--btn-ink); }
+.btn.small { height: 32px; padding: 0 12px; font-size: 12px; }
+@media (hover: hover) {
+  .btn:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .btn.primary:hover, .btn.danger:hover { background: var(--ess-bg); border-color: var(--ess-bg); color: var(--ess-ink); }
+  .theme-btn:hover { border-color: var(--mast-ink-2); }
+}
 
-  body {
-    background-image: var(--page-texture);
-    min-height: 100vh;
-  }
+/* ---------- Continue cards ---------- */
+.continue { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 16px; margin-top: -76px; }
+.card { min-width: 0; padding: 20px 22px 16px; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--lift); }
+.card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; padding-bottom: 12px; border-bottom: 2px solid var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 19px; line-height: 1; letter-spacing: .05em; text-transform: uppercase; }
+.card-h span + span { font-family: var(--font-ui); font-weight: 600; font-size: 12.5px; letter-spacing: .12em; color: var(--ink-3); }
+.qlist { list-style: none; margin: 0; padding: 0; }
+.qitem { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.qitem:last-child { border-bottom: 0; }
+.qt { min-width: 0; }
+.qtitle { font-weight: 600; font-size: 16.5px; line-height: 1.25; }
+.qmeta { margin-top: 3px; font-size: 13.5px; color: var(--ink-3); }
+.qempty { margin: 0; padding: 12px 0 4px; font-size: 15px; color: var(--ink-3); }
+.next-ess { margin-top: 2px; padding-top: 12px; border-top: 1px solid var(--rule); font-size: 14.5px; color: var(--ink-2); }
+.next-ess b { color: var(--ink); }
 
-  ::selection { background: var(--accent); color: var(--bg); }
+.banner { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 20px 0 0; padding: 16px 18px; background: var(--surface); border: 2px solid var(--ink); }
+.banner p { flex: 1 1 260px; margin: 0; font-size: 15.5px; }
 
-  .wrap {
-    max-width: 880px;
-    margin: 0 auto;
-    padding: 56px 28px 96px;
-  }
+/* ---------- Tabs ---------- */
+.tabs { position: sticky; top: var(--sticky-top); z-index: 10; margin-top: 44px; background: var(--surface); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.tabs-in { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.tabs-in::-webkit-scrollbar { display: none; }
+.tab { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; margin-bottom: -1px; padding: 17px 14px 14px; background: none; border: 0; border-bottom: 3px solid transparent; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 16px; line-height: 1; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.tab:first-child { margin-left: -14px; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.tcount { padding: 4px 6px 3px; background: var(--tile); color: var(--ink-2); font-family: var(--font-ui); font-weight: 700; font-size: 11.5px; line-height: 1; letter-spacing: .06em; }
 
-  /* ============================================================
-     ORNAMENT (inline SVG — no font-glyph risk)
-     ============================================================ */
-  .ornament {
-    display: flex;
-    justify-content: center;
-    color: var(--accent);
-    margin-bottom: 26px;
-  }
-  .ornament svg { display: block; }
+/* ---------- Guide toolbar ---------- */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin: 30px 0 14px; }
+.seg-wrap { display: flex; align-items: center; gap: 12px; }
+.seg-label { font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.seg { display: inline-flex; border: 1px solid var(--ink); }
+.seg button { height: 36px; padding: 0 14px; background: none; border: 0; cursor: pointer; font-family: var(--font-ui); font-weight: 700; font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+.seg button + button { border-left: 1px solid var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--btn); color: var(--btn-ink); }
+.toggle { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; font-family: var(--font-ui); font-weight: 700; font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.toggle input { appearance: none; -webkit-appearance: none; display: grid; place-items: center; width: 18px; height: 18px; margin: 0; background: var(--surface); border: 1.5px solid var(--ink); cursor: pointer; }
+.toggle input:checked { background: var(--btn); border-color: var(--btn); }
+.toggle input:checked::after { content: ""; width: 5px; height: 9px; border: solid var(--btn-ink); border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+.search { position: relative; flex: 1 1 240px; min-width: 0; }
+.search svg { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
+.search input { width: 100%; height: 40px; padding: 0 12px 0 38px; font-size: 15px; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 0; -webkit-appearance: none; appearance: none; }
+.search input:focus { border-color: var(--ink); }
+.search input::placeholder { color: var(--ink-3); }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 0; font-size: 13.5px; color: var(--ink-3); }
+.lg { display: inline-flex; align-items: center; gap: 8px; }
+.lg-note { flex-basis: 100%; }
 
-  /* ============================================================
-     HEADER
-     ============================================================ */
-  header {
-    padding-bottom: 40px;
-    margin-bottom: 40px;
-    position: relative;
-    border-bottom: 1px solid var(--rule);
-  }
+/* ---------- Chips ---------- */
+.v, .rgtag, .listen-btn, .role { display: inline-flex; align-items: center; gap: 7px; padding: 4px 8px 3px; font-family: var(--font-ui); font-weight: 700; font-size: 11.5px; line-height: 1.2; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; border: 0; border-radius: 0; }
+.v.essential { background: var(--ess-bg); color: var(--ess-ink); }
+.v.recommended { background: var(--btn); color: var(--btn-ink); }
+.v.optional { color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--ink-3); }
+.v.skip { color: var(--ink-3); box-shadow: inset 0 0 0 1px var(--rule); }
+.score { font-family: var(--font-ui); font-weight: 600; font-size: 13.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.score b { font-size: 15px; font-weight: 700; color: var(--ink); }
+.kind { white-space: nowrap; }
+.rgtag { color: var(--raven); background: var(--raven-bg); cursor: pointer; }
+.rgtag::before { content: ""; width: 6px; height: 6px; background: currentColor; transform: rotate(45deg); flex: none; }
+.listen-btn { background: none; color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--rule); cursor: pointer; }
+.listen-btn:hover { color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.listen-btn[aria-pressed="true"] { color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.listen-btn[aria-pressed="true"]::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
 
-  .theme-toggle {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: transparent;
-    border: 1px solid var(--rule);
-    color: var(--ink-dim);
-    padding: 9px 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: color 0.2s ease, border-color 0.2s ease;
-    font-weight: 500;
-  }
-  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+/* ---------- Phases ---------- */
+.phase { margin-top: 44px; }
+.phase-h { position: relative; margin: 0; font: inherit; }
+.phase-h::after { content: ""; position: absolute; left: 0; bottom: 0; width: var(--pct, 0%); height: 2px; background: var(--ink); transition: width .4s ease; }
+.phase-head { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px 18px; align-items: end; width: 100%; padding: 0 0 14px; background: none; border: 0; border-bottom: 2px solid var(--rule); cursor: pointer; text-align: left; color: inherit; }
+.phase-text { min-width: 0; }
+.phase-num { display: block; margin-bottom: 6px; font-family: var(--font-ui); font-weight: 700; font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.ph-title { display: block; font-family: var(--font-display); font-weight: 700; font-size: 31px; line-height: 1; letter-spacing: .015em; text-transform: uppercase; color: var(--ink); text-wrap: balance; }
+.ph-sub { display: block; margin-top: 7px; font-size: 14.5px; color: var(--ink-3); }
+.phase-count { padding-bottom: 2px; font-family: var(--font-ui); font-weight: 700; font-size: 14px; letter-spacing: .04em; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.phase-count.done { color: var(--ink); }
+.chev { width: 11px; height: 11px; margin: 0 4px 9px 0; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(45deg); transition: transform .2s; }
+.phase.collapsed .chev { transform: rotate(-45deg); margin-bottom: 5px; }
+.phase.collapsed .rows { display: none; }
+.phase-note { margin: 0; padding: 12px 0 0; font-size: 13.5px; color: var(--ink-3); }
 
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 18px;
-    font-weight: 500;
-    text-align: center;
-  }
+/* ---------- Book rows ---------- */
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 4px 20px; align-items: start; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.row:last-child { border-bottom: 0; }
+.tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; width: 60px; height: 60px; overflow: hidden; background: var(--tile); color: var(--ink); }
+.tile small { font-family: var(--font-ui); font-weight: 700; font-size: 9.5px; line-height: 1; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.tile span { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 1; white-space: nowrap; }
+.tile.n4 span { font-size: 20px; }
+.tile.n5 span { font-size: 18px; }
+.tile.n6 span { font-size: 17px; }
+.tile.n7 span { font-size: 16px; }
+.tile.extra span { font-size: 26px; font-weight: 600; color: var(--ink-3); }
+.body { min-width: 0; }
+.tline { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+.title { font-weight: 600; font-size: 19px; line-height: 1.25; color: var(--ink); }
+.author { font-size: 14.5px; color: var(--ink-3); }
+.blurb { max-width: 68ch; margin: 6px 0 0; font-size: 15.5px; color: var(--ink-2); }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 12px; font-size: 13.5px; color: var(--ink-3); }
 
-  h1 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 500;
-    font-style: italic;
-    font-size: clamp(42px, 6.4vw, 64px);
-    line-height: 1.02;
-    letter-spacing: -0.015em;
-    margin: 0 0 18px;
-    color: var(--accent);
-    text-align: center;
-  }
+.check { display: grid; place-items: center; width: 32px; height: 32px; margin-top: 2px; padding: 0; background: var(--surface); border: 2px solid var(--ink); border-radius: 0; cursor: pointer; transition: background-color .15s, border-color .15s; }
+.check:hover { border-color: var(--accent); }
+.check::after { content: ""; width: 7px; height: 13px; border: solid transparent; border-width: 0 2.5px 2.5px 0; transform: translateY(-1px) rotate(45deg); }
+.check[aria-checked="true"] { background: var(--btn); border-color: var(--btn); }
+.check[aria-checked="true"]::after { border-color: var(--btn-ink); }
+.check[disabled] { opacity: .5; cursor: default; }
 
-  .subtitle {
-    color: var(--ink-dim);
-    font-size: 15.5px;
-    max-width: 58ch;
-    margin: 0 auto;
-    line-height: 1.6;
-    text-align: center;
-  }
-  .subtitle .rg-dot { color: var(--raven); font-weight: 700; }
+.row.is-done { padding-block: 12px; }
+.row.is-done .tile { background: var(--done-bg); }
+.row.is-done .tile span { color: var(--done-ink); }
+.row.is-done .tile small { color: var(--done-ink-2); }
+.row.is-done .title { color: var(--ink-3); }
+.row.is-done .blurb, .row.is-done .meta .kind, .row.is-done .listen-btn { display: none; }
+.row.is-listening { margin-inline: -14px; padding-inline: 14px; background: linear-gradient(90deg, var(--listen-bg), transparent 80%); box-shadow: inset 3px 0 0 var(--accent); }
 
-  .progress-block {
-    display: flex;
-    align-items: baseline;
-    gap: 28px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-    padding-top: 28px;
-    border-top: 1px solid var(--rule-soft);
-  }
+/* ---------- Raven Guard path ---------- */
+.lede { max-width: 66ch; margin: 34px 0 0; font-size: 18px; color: var(--ink-2); }
+.lede strong { color: var(--ink); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 26px 0 8px; border: 1px solid var(--rule); background: var(--surface); }
+.fact { min-width: 0; padding: 18px 20px; }
+.fact + .fact { border-left: 1px solid var(--rule); }
+.fact h3 { margin: 0 0 8px; font-family: var(--font-ui); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--raven); }
+.fact p { margin: 0; font-size: 15px; color: var(--ink-2); }
+.fact p b { color: var(--ink); }
+.rg-progress { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 20px 0 0; font-size: 14.5px; color: var(--ink-2); }
+.rg-progress .bar { flex: 1 1 220px; }
+.rg-progress .bar > span { background: var(--raven); }
+.callout { margin: 18px 0 0; padding: 14px 18px; border-left: 4px solid var(--raven); background: var(--raven-bg); color: var(--ink); font-size: 15px; }
+.act { margin-top: 44px; }
+.act-head { padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
+.act-num { display: block; margin-bottom: 6px; font-family: var(--font-ui); font-weight: 700; font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--raven); }
+.act-head h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 29px; line-height: 1; letter-spacing: .015em; text-transform: uppercase; text-wrap: balance; }
+.act-head p { margin: 7px 0 0; font-size: 14.5px; color: var(--ink-3); }
+.tl { position: relative; list-style: none; margin: 0; padding: 6px 0 0; }
+.tl::before { content: ""; position: absolute; left: 15px; top: 24px; bottom: 24px; width: 2px; background: var(--rule); }
+.node { position: relative; display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 4px 18px; padding: 16px 0; }
+.node .dot { position: relative; z-index: 1; width: 14px; height: 14px; margin: 7px 0 0 9px; background: var(--bg); border: 2px solid var(--raven); transform: rotate(45deg); }
+.node.done .dot { background: var(--raven); }
+.ntitle { font-weight: 600; font-size: 18.5px; line-height: 1.25; }
+.role { padding: 3px 7px 2px; font-size: 11px; }
+.role.lead { background: var(--raven); color: var(--raven-ink); }
+.role.major { background: var(--raven-bg); color: var(--raven); }
+.role.minor { color: var(--ink-3); box-shadow: inset 0 0 0 1px var(--rule); }
+.nby { margin-top: 2px; font-size: 14px; color: var(--ink-3); }
+.ntext { max-width: 68ch; margin: 6px 0 0; font-size: 15.5px; color: var(--ink-2); }
+.node dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; margin: 10px 0 0; font-size: 14px; }
+.node dt { padding-top: 2px; font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.node dd { min-width: 0; margin: 0; color: var(--ink-2); }
+.node dd .st { font-weight: 600; color: var(--ink); }
+.linkish { padding: 0; background: none; border: 0; cursor: pointer; font: inherit; font-weight: 600; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.node.done .ntitle { color: var(--ink-3); }
 
-  .progress-num {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 50px;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1;
-  }
-  .progress-num em { color: var(--accent); font-style: normal; font-weight: 600; }
-  .progress-num .sep { color: var(--ink-faint); margin: 0 4px; }
+/* ---------- Save & sync ---------- */
+.panel { margin-top: 20px; padding: 22px 24px; background: var(--surface); border: 1px solid var(--rule); }
+.panel:first-child { margin-top: 32px; }
+.panel h2 { margin: 0 0 8px; font-family: var(--font-display); font-weight: 700; font-size: 23px; line-height: 1.05; letter-spacing: .03em; text-transform: uppercase; }
+.panel p { max-width: 68ch; margin: 8px 0; font-size: 15.5px; color: var(--ink-2); }
+.panel a { color: var(--ink); font-weight: 600; text-underline-offset: 3px; }
+.save-state { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; color: var(--ink); }
+.save-state::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--ink-3); flex: none; }
+.save-state.synced::before { background: var(--ok); }
+.codebox { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.codebox input { flex: 1 1 260px; min-width: 0; height: 40px; padding: 0 12px; font-family: var(--font-mono); font-size: 13.5px; color: var(--ink); background: var(--sunk); border: 1px solid var(--rule); border-radius: 0; }
+.msg { min-height: 1.4em; margin-top: 10px; font-size: 14.5px; color: var(--ink-2); }
+.msg.ok { color: var(--ink); }
+.msg.err { color: var(--accent); }
+.confirm { margin-top: 14px; padding: 14px 16px; background: var(--sunk); border: 1px solid var(--ink); }
+.confirm p { margin: 0 0 12px; color: var(--ink); }
+.confirm .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.note { font-size: 14px; color: var(--ink-3); }
 
-  .progress-bar {
-    flex: 1;
-    min-width: 200px;
-    height: 2px;
-    background: var(--rule-soft);
-    position: relative;
-    overflow: hidden;
-  }
-  .progress-bar > span {
-    display: block;
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-soft), var(--accent), var(--accent-hi));
-    width: 0%;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+/* ---------- Footer ---------- */
+.foot { margin-top: 96px; background: var(--mast); color: var(--mast-ink-2); }
+.foot-in { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 18px 40px; padding-block: 40px 44px; font-size: 14.5px; }
+.foot-in p { margin: 0; max-width: 60ch; }
+.foot-name { display: block; margin-bottom: 8px; font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 1; letter-spacing: .05em; text-transform: uppercase; color: var(--mast-ink); }
+.motto { font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; color: var(--mast-ink); white-space: nowrap; }
+.fine { grid-column: 1 / -1; padding-top: 18px; border-top: 1px solid var(--mast-rule); font-size: 12.5px; }
 
-  .progress-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-meta);
-    font-weight: 500;
-  }
-
-  /* ============================================================
-     FILTERS
-     ============================================================ */
-  .filters {
-    display: flex;
-    gap: 2px;
-    margin: 40px 0 24px;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--rule);
-  }
-  .filters button {
-    background: none;
-    border: none;
-    color: var(--ink-meta);
-    padding: 12px 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: color 0.2s ease;
-    margin-bottom: -1px;
-    font-weight: 500;
-  }
-  .filters button:hover { color: var(--ink); }
-  .filters button.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
-  .filters button .count { color: var(--ink-faint); margin-left: 8px; font-weight: 400; }
-
-  /* ============================================================
-     SECTIONS + BOOKS
-     ============================================================ */
-  .section-head {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 28px;
-    color: var(--ink);
-    margin: 52px 0 8px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--rule);
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  /* rubricated diamond — pure CSS, no glyph */
-  .section-head .title-text::before {
-    content: "";
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
-    transform: rotate(45deg);
-    margin-right: 14px;
-    vertical-align: 2px;
-  }
-  .section-head .title-text { flex: 1; }
-  .section-head .tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-style: normal;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-meta);
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .book {
-    display: grid;
-    grid-template-columns: 56px 1fr auto;
-    gap: 20px;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--rule-soft);
-    align-items: start;
-  }
-  .book:last-child { border-bottom: none; }
-
-  .slot {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 22px;
-    color: var(--accent);
-    padding-top: 3px;
-    text-align: right;
-    font-weight: 600;
-    font-style: italic;
-    line-height: 1;
-  }
-
-  .book-body { min-width: 0; }
-
-  .book-title-row {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-  }
-  .book-title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 600;
-    font-size: 22px;
-    color: var(--ink);
-    line-height: 1.2;
-  }
-  .book-author {
-    color: var(--ink-dim);
-    font-size: 14.5px;
-    font-style: italic;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 500;
-  }
-  .book-author::before { content: "— "; color: var(--ink-faint); }
-
-  .book-blurb {
-    color: var(--ink-dim);
-    font-size: 15px;
-    line-height: 1.6;
-    margin-top: 6px;
-  }
-
-  .book-meta {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink-meta);
-    font-weight: 500;
-    align-items: center;
-  }
-  .book-meta .rating { color: var(--accent); font-weight: 600; }
-  .book-meta .rg {
-    color: var(--raven);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 600;
-  }
-  .book-meta .rg::before {
-    content: "";
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: var(--raven);
-    transform: rotate(45deg);
-  }
-  .book-meta .must {
-    color: var(--crimson);
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .book-meta .must::before {
-    content: "";
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: var(--crimson);
-    transform: rotate(45deg);
-  }
-
-  /* checkbox */
-  .check { grid-column: 3; grid-row: 1 / span 2; align-self: start; padding-top: 6px; }
-  .check input {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 26px;
-    height: 26px;
-    border: 1.5px solid var(--ink-meta);
-    background: transparent;
-    cursor: pointer;
-    position: relative;
-    transition: border-color 0.15s ease, background 0.15s ease;
-  }
-  .check input:hover { border-color: var(--accent); }
-  .check input:checked { background: var(--accent); border-color: var(--accent); }
-  .check input:checked::after {
-    content: "";
-    position: absolute;
-    left: 8px;
-    top: 3px;
-    width: 6px;
-    height: 13px;
-    border: solid var(--check-tick);
-    border-width: 0 2.5px 2.5px 0;
-    transform: rotate(45deg);
-  }
-  .check input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-  /* read state — manuscript strike-through, still legible */
-  .book.read .book-title {
-    color: var(--read-tint);
-    font-style: italic;
-    text-decoration: line-through;
-    text-decoration-color: var(--accent-soft);
-    text-decoration-thickness: 1px;
-  }
-  .book.read .slot,
-  .book.read .book-author,
-  .book.read .book-blurb,
-  .book.read .book-meta,
-  .book.read .book-meta .rating,
-  .book.read .book-meta .rg,
-  .book.read .book-meta .must { color: var(--read-tint); }
-  .book.read .book-meta .rg::before,
-  .book.read .book-meta .must::before { background: var(--read-tint); }
-
-  /* ============================================================
-     FOOTER
-     ============================================================ */
-  footer {
-    margin-top: 72px;
-    padding-top: 32px;
-    border-top: 1px solid var(--rule);
-    text-align: center;
-  }
-  .footer-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-meta);
-    align-items: center;
-    margin-top: 26px;
-  }
-  footer button {
-    background: none;
-    border: 1px solid var(--rule);
-    color: var(--ink-dim);
-    padding: 9px 16px;
-    font-family: inherit;
-    font-size: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    cursor: pointer;
-    transition: color 0.2s ease, border-color 0.2s ease;
-    font-weight: 500;
-  }
-  footer button:hover { color: var(--accent); border-color: var(--accent); }
-  .footer-tag {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--ink-faint);
-    margin-top: 22px;
-  }
-
-  .hidden { display: none !important; }
-
-  .empty {
-    text-align: center;
-    padding: 56px 0;
-    color: var(--ink-meta);
-    font-style: italic;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-  }
-
-  @media (max-width: 640px) {
-    .wrap { padding: 36px 20px 72px; }
-    .theme-toggle { position: static; display: block; margin: 0 auto 24px; }
-    .book { grid-template-columns: 38px 1fr auto; gap: 14px; padding: 18px 0; }
-    .slot { font-size: 17px; padding-top: 4px; }
-    .book-title { font-size: 18.5px; }
-    .book-blurb { font-size: 14px; }
-    .section-head { font-size: 22px; }
-    h1 { font-size: 42px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
+/* ---------- Narrow screens ---------- */
+@media (max-width: 880px) {
+  .hero-in { grid-template-columns: minmax(0, 1fr); gap: 30px; padding-block: 44px 104px; }
+  .hero-stat { padding: 26px 0 0; border-left: 0; border-top: 1px solid var(--mast-rule); }
+}
+@media (max-width: 720px) {
+  .continue { grid-template-columns: minmax(0, 1fr); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .fact + .fact { border-left: 0; border-top: 1px solid var(--rule); }
+}
+@media (max-width: 560px) {
+  :root { --gutter: 16px; }
+  .strip-label { display: none; }
+  .strip-in { justify-content: flex-end; }
+  .theme-btn .tlabel { display: none; }
+  .sync-chip.has-link .sync-text { display: none; }
+  .hero-in { padding-block: 36px 96px; }
+  .hero-lede { font-size: 16px; }
+  .tab { padding: 15px 10px 12px; font-size: 14.5px; }
+  .tab:first-child { margin-left: -10px; }
+  .tab .long { display: none; }
+  .seg-wrap, .seg { width: 100%; }
+  .seg-label { display: none; }
+  .seg button { flex: 1 1 0; padding: 0 6px; font-size: 12px; letter-spacing: .06em; }
+  .ph-title { font-size: 25px; }
+  .row { grid-template-columns: 48px minmax(0, 1fr) auto; gap: 4px 14px; }
+  .row.is-listening { margin-inline: -10px; padding-inline: 10px; }
+  .tile { width: 48px; height: 48px; gap: 2px; }
+  .tile small { font-size: 8.5px; letter-spacing: .1em; }
+  .tile span { font-size: 18px; }
+  .tile.n4 span { font-size: 16px; }
+  .tile.n5 span { font-size: 15px; }
+  .tile.n6 span { font-size: 14px; }
+  .tile.n7 span { font-size: 13px; }
+  .tile.extra span { font-size: 22px; }
+  .title { font-size: 17.5px; }
+  .blurb, .ntext { font-size: 15px; }
+  .card { padding: 16px 16px 12px; }
+  .rgtag { white-space: normal; text-align: left; }
+  .panel { padding: 18px 16px; }
+  .node { grid-template-columns: 26px minmax(0, 1fr) auto; gap: 4px 12px; }
+  .tl::before { left: 12px; }
+  .node .dot { margin-left: 6px; }
+  .foot-in { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-
-  <header>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">Parchment</button>
-    <div class="ornament" aria-hidden="true">
-      <svg viewBox="0 0 160 12" width="160" height="12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 6h58" stroke="currentColor" stroke-width="1"/>
-        <path d="M102 6h58" stroke="currentColor" stroke-width="1"/>
-        <path d="M80 1L85 6L80 11L75 6Z" fill="currentColor"/>
-        <circle cx="66" cy="6" r="1.4" fill="currentColor"/>
-        <circle cx="94" cy="6" r="1.4" fill="currentColor"/>
-      </svg>
-    </div>
-    <div class="eyebrow">Warhammer 40,000 &nbsp;&middot;&nbsp; Black Library</div>
-    <h1>The Horus Heresy</h1>
-    <p class="subtitle">A reading log in recommended order. Ratings out of ten. <span class="rg-dot">&#9670;</span> marks Raven Guard content worth reading regardless of rating.</p>
-
-    <div class="progress-block">
-      <div class="progress-num"><em id="progress-count">0</em><span class="sep">/</span><span id="progress-total">0</span></div>
-      <div class="progress-bar"><span id="progress-fill"></span></div>
-      <div class="progress-label" id="progress-pct">0% complete</div>
-    </div>
-  </header>
-
-  <nav class="filters" role="tablist">
-    <button class="active" data-filter="all">All <span class="count" id="count-all"></span></button>
-    <button data-filter="toread">To read <span class="count" id="count-toread"></span></button>
-    <button data-filter="read">Read <span class="count" id="count-read"></span></button>
-    <button data-filter="rg">Raven Guard <span class="count" id="count-rg"></span></button>
-    <button data-filter="must">Must-read <span class="count" id="count-must"></span></button>
-  </nav>
-
-  <main id="list"></main>
-
-  <div class="empty hidden" id="empty">The record is empty. Change your filter.</div>
-
-  <footer>
-    <div class="ornament" aria-hidden="true">
-      <svg viewBox="0 0 160 12" width="160" height="12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 6h58" stroke="currentColor" stroke-width="1"/>
-        <path d="M102 6h58" stroke="currentColor" stroke-width="1"/>
-        <path d="M80 1L85 6L80 11L75 6Z" fill="currentColor"/>
-        <circle cx="66" cy="6" r="1.4" fill="currentColor"/>
-        <circle cx="94" cy="6" r="1.4" fill="currentColor"/>
-      </svg>
-    </div>
-    <div class="footer-row">
-      <div>Local save &middot; your browser only</div>
-      <div style="display:flex; gap:10px;">
-        <button id="export-btn">Export</button>
-        <button id="reset-btn">Reset</button>
+<div id="hh-app">
+  <header class="hero">
+    <div class="strip">
+      <div class="strip-in">
+        <span class="strip-label">Horus Heresy Reading Log</span>
+        <div class="strip-tools">
+          <span class="sync-chip" id="strip-sync"><span class="dot"></span><span class="sync-text">Loading</span></span>
+          <button class="theme-btn" id="theme-btn" type="button" data-action="theme">Theme</button>
+        </div>
       </div>
     </div>
-    <div class="footer-tag">The Emperor Protects</div>
-  </footer>
+    <div class="hero-in">
+      <div class="hero-text">
+        <p class="eyebrow">Black Library &middot; Reading order</p>
+        <h1>The Horus Heresy</h1>
+        <p class="hero-lede">The 54 numbered books and the ten-volume Siege of Terra, with novellas slotted in where they land. Each book has a verdict and an entertainment score, and the Raven Guard get a path of their own.</p>
+      </div>
+      <div class="hero-stat">
+        <p class="stat-label">Your progress</p>
+        <div class="big" id="sum-big">0<span class="of">/ 0</span></div>
+        <p class="prog-label" id="sum-label">Finished on your path</p>
+        <div class="bar" aria-hidden="true"><span id="sum-bar" style="width:0%"></span></div>
+        <div class="mini-stats" id="sum-mini"></div>
+      </div>
+    </div>
+    <p class="hero-mark" id="hero-mark" aria-hidden="true"></p>
+  </header>
 
+  <div class="main">
+    <section class="continue" aria-label="Continue listening">
+      <div class="card">
+        <h2 class="card-h"><span>Now listening</span><span id="listen-count"></span></h2>
+        <ul class="qlist" id="now-list"></ul>
+      </div>
+      <div class="card">
+        <h2 class="card-h"><span>Up next</span><span id="path-name"></span></h2>
+        <ul class="qlist" id="next-list"></ul>
+        <div id="next-ess"></div>
+      </div>
+    </section>
+    <div id="import-banner" hidden></div>
+  </div>
+
+  <nav class="tabs" aria-label="Sections">
+    <div class="tabs-in" role="tablist">
+      <button class="tab" role="tab" id="tab-guide" aria-controls="view-guide" data-tab="guide">Reading guide</button>
+      <button class="tab" role="tab" id="tab-raven" aria-controls="view-raven" data-tab="raven"><span>Raven Guard<span class="long"> path</span></span><span class="tcount" id="rg-tab-count"></span></button>
+      <button class="tab" role="tab" id="tab-sync" aria-controls="view-sync" data-tab="sync">Save &amp; sync</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <section class="view" id="view-guide" role="tabpanel" aria-labelledby="tab-guide">
+      <div class="toolbar">
+        <div class="seg-wrap">
+          <span class="seg-label">Path</span>
+          <span class="seg" role="group" aria-label="Reading path">
+            <button type="button" data-action="path" data-path="essential">Essentials</button>
+            <button type="button" data-action="path" data-path="recommended">Recommended</button>
+            <button type="button" data-action="path" data-path="all">Everything</button>
+          </span>
+        </div>
+        <label class="toggle"><input type="checkbox" id="hide-done"> Hide finished</label>
+        <div class="search">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M10.8 10.8l3.7 3.7" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>
+          <input type="search" id="search" placeholder="Search title, author or character" aria-label="Search books" autocomplete="off">
+        </div>
+      </div>
+      <p class="legend">
+        <span class="lg"><span class="v essential">Essential</span> main story</span>
+        <span class="lg"><span class="v recommended">Recommended</span> strongly worth it</span>
+        <span class="lg"><span class="v optional">Optional</span> for fans</span>
+        <span class="lg"><span class="v skip">Skip</span> safe to miss</span>
+        <span class="lg-note">Scores are entertainment out of 10. <b>+</b> marks a novella or extra.</span>
+      </p>
+      <div id="guide"></div>
+    </section>
+
+    <section class="view" id="view-raven" role="tabpanel" aria-labelledby="tab-raven" hidden>
+      <div id="raven"></div>
+    </section>
+
+    <section class="view" id="view-sync" role="tabpanel" aria-labelledby="tab-sync" hidden>
+      <div id="sync"></div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <div class="foot-in">
+      <div>
+        <strong class="foot-name">Horus Heresy Reading Log</strong>
+        <p>Reading order follows the numbered series, with novellas placed where they land in the story.</p>
+      </div>
+      <p class="motto">The Emperor protects</p>
+      <p class="fine">Unofficial fan project, not affiliated with Games Workshop. Warhammer, The Horus Heresy and Black Library are trademarks of Games Workshop Ltd.</p>
+    </div>
+  </footer>
 </div>
 
-<script>
-// ============================================================
-// Theme handling
-// ============================================================
-const THEME_KEY = 'hh-theme';
-function applyTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-  const btn = document.getElementById('theme-toggle');
-  btn.textContent = t === 'dark' ? 'Parchment' : 'Imperium';
-  try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
-}
-(function initTheme(){
-  let saved = null;
-  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
-  if (saved === 'light' || saved === 'dark') return applyTheme(saved);
-  const prefersLight = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: light)').matches;
-  applyTheme(prefersLight ? 'light' : 'dark');
-})();
-document.getElementById('theme-toggle').addEventListener('click', function () {
-  const cur = document.documentElement.getAttribute('data-theme');
-  applyTheme(cur === 'dark' ? 'light' : 'dark');
-});
+<script type="application/json" id="hh-saved">null</script>
+<script id="hh-js">
+(function () {
+'use strict';
 
-// ============================================================
-// Horus Heresy reading data
-// ============================================================
-const BOOKS = [
-  { slot: "I", title: "Horus Rising", author: "Dan Abnett", rating: 10, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "\"I was there, the day Horus slew the Emperor.\" The brotherhood before the fall." },
-  { slot: "II", title: "False Gods", author: "Graham McNeill", rating: 8, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "The wound on Davin. The actual moment Horus tips." },
-  { slot: "III", title: "Galaxy in Flames", author: "Ben Counter", rating: 7, kind: "Novel", section: "The Opening Trilogy", must: true, blurb: "Isstvaan III. Virus bombs. Tragic and pacey; the plot carries it." },
-
-  { slot: "IV", title: "The Flight of the Eisenstein", author: "James Swallow", rating: 8, kind: "Novel", section: "The Dropsite Era", must: true, blurb: "Garro smuggling the warning to Terra. Reads like a thriller." },
-  { slot: "V", title: "Fulgrim", author: "Graham McNeill", rating: 7, kind: "Novel", section: "The Dropsite Era", blurb: "Dropsite Massacre. Ferrus Manus's head hits the floor here. Slow middle, crucial events." },
-  { slot: "VI", title: "Descent of Angels", author: "Mitchel Scanlon", rating: 4, kind: "Novel", section: "The Dropsite Era", blurb: "Dark Angel origin on Caliban. Feudal, slow, skippable." },
-  { slot: "VII", title: "Legion", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Dropsite Era", must: true, blurb: "The Alpha Legion book that isn't about the Alpha Legion. End-reveal rewrites everything." },
-  { slot: "VIII", title: "Battle for the Abyss", author: "Ben Counter", rating: 2, kind: "Novel", section: "The Dropsite Era", blurb: "Don't. Nothing in it matters." },
-  { slot: "IX", title: "Mechanicum", author: "Graham McNeill", rating: 7, kind: "Novel", section: "The Dropsite Era", blurb: "Martian civil war. Skippable but solid." },
-  { slot: "X", title: "Tales of Heresy", author: "Various", rating: 8, kind: "Anthology", section: "The Dropsite Era", blurb: "Read for Blood Games, The Last Church, After Desh'ea. Kharn meets Angron here." },
-
-  { slot: "XI", title: "Fallen Angels", author: "Mike Lee", rating: 4, kind: "Novel", section: "The Second Wave", blurb: "Skip unless you're following the Dark Angels arc." },
-  { slot: "XII", title: "A Thousand Sons", author: "Graham McNeill", rating: 9, kind: "Novel", section: "The Second Wave", must: true, blurb: "Magnus's tragedy. Pair immediately with Prospero Burns." },
-  { slot: "XV", title: "Prospero Burns", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Second Wave", must: true, blurb: "Same event, Space Wolves POV. Anthropological, strange, brilliant." },
-  { slot: "XIII", title: "Nemesis", author: "James Swallow", rating: 6, kind: "Novel", section: "The Second Wave", blurb: "Execution Force sent after Horus. Pulpy fun." },
-  { slot: "XIV", title: "The First Heretic", author: "Aaron Dembski-Bowden", rating: 10, kind: "Novel", section: "The Second Wave", must: true, blurb: "Lorgar, Argel Tal, the real origin of the Heresy. Arguably the best in the series." },
-  { slot: "XVI", title: "Age of Darkness", author: "Various", rating: 7, kind: "Anthology", section: "The Second Wave", rg: true, blurb: "Read for The Face of Treachery (first post-Isstvaan Raven Guard) and Abnett/ADB shorts." },
-  { slot: "XVII", title: "The Outcast Dead", author: "Graham McNeill", rating: 6, kind: "Novel", section: "The Second Wave", blurb: "Traitor marines trapped on Terra when the news breaks." },
-
-  { slot: "&#9670;", title: "Raven's Flight", author: "Gav Thorpe", rating: 8, kind: "Audio drama", section: "Raven Guard Detour", rg: true, blurb: "Corax's escape from Isstvaan V. Also included in Shadows of Treachery." },
-  { slot: "XVIII", title: "Deliverance Lost", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "Raven Guard Detour", rg: true, blurb: "The primary Raven Guard novel. Corax returns to Deliverance with Emperor's gene-tech; Alpha Legion has its fingers everywhere." },
-
-  { slot: "XIX", title: "Know No Fear", author: "Dan Abnett", rating: 10, kind: "Novel", section: "Calth & Shadow Crusade", must: true, blurb: "The Battle of Calth. Minute-by-minute. Abnett's best structural experiment." },
-  { slot: "XX", title: "The Primarchs", author: "Various", rating: 6, kind: "Anthology", section: "Calth & Shadow Crusade", blurb: "Read for The Reflection Crack'd (ADB) and Feat of Iron (Wraight)." },
-  { slot: "XXI", title: "Fear to Tread", author: "James Swallow", rating: 7, kind: "Novel", section: "Calth & Shadow Crusade", blurb: "Blood Angels at Signus Prime. Sanguinius vs a greater daemon." },
-  { slot: "XXII", title: "Shadows of Treachery", author: "Various", rating: 8, kind: "Anthology", section: "Calth & Shadow Crusade", rg: true, blurb: "Prince of Crows (ADB), The Lightning Tower (Abnett), and Raven's Flight." },
-  { slot: "XXIII", title: "Angel Exterminatus", author: "Graham McNeill", rating: 7, kind: "Novel", section: "Calth & Shadow Crusade", blurb: "Fulgrim and Perturabo on a mad treasure hunt. Perturabo character study." },
-  { slot: "XXIV", title: "Betrayer", author: "Aaron Dembski-Bowden", rating: 10, kind: "Novel", section: "Calth & Shadow Crusade", must: true, blurb: "Angron and Lorgar tearing Ultramar apart. Top-three book in the series." },
-  { slot: "XXV", title: "Mark of Calth", author: "Various", rating: 6, kind: "Anthology", section: "Calth & Shadow Crusade", blurb: "Calth aftermath shorts. Skippable, couple of decent ones." },
-
-  { slot: "XXVI", title: "Vulkan Lives", author: "Nick Kyme", rating: 5, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "Curze torturing Vulkan for 400 pages. Skippable." },
-  { slot: "XXVII", title: "The Unremembered Empire", author: "Dan Abnett", rating: 8, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, must: true, blurb: "Guilliman builds a second Imperium; lost primarchs arrive — including Corax." },
-  { slot: "XXVIII", title: "Scars", author: "Chris Wraight", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, blurb: "The White Scars book everyone sleeps on. Wraight is quietly one of the series' best." },
-  { slot: "XXIX", title: "Vengeful Spirit", author: "Graham McNeill", rating: 6, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "Horus, Knights, Death Guard on Molech. Big Emperor-related reveal." },
-  { slot: "XXX", title: "The Damnation of Pythos", author: "David Annandale", rating: 3, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "Second-worst in the series. Skip." },
-  { slot: "XXXI", title: "Legacies of Betrayal", author: "Various", rating: 6, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Mixed bag. Pick through or skip." },
-  { slot: "XXXII", title: "Deathfire", author: "Nick Kyme", rating: 5, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, blurb: "Numeon (Raven Guard survivor) tries to return Vulkan's body home." },
-  { slot: "XXXIII", title: "War Without End", author: "Various", rating: 7, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Sisters of Silence and Custodes material stands out." },
-  { slot: "XXXIV", title: "Pharos", author: "Guy Haley", rating: 8, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, blurb: "Night Lords assault on the Pharos beacon. Corax appears. Dantioch is great." },
-  { slot: "XXXV", title: "Eye of Terra", author: "Various", rating: 7, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Mixed but has some real gems." },
-  { slot: "XXXVI", title: "The Path of Heaven", author: "Chris Wraight", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", blurb: "White Scars' breakneck run to Terra. Wraight at his peak. Hidden highlight." },
-  { slot: "XXXVII", title: "The Silent War", author: "Various", rating: 7, kind: "Anthology", section: "Imperium Secundus & the Long Middle", blurb: "Sisters of Silence and Malcador's Knights-Errant." },
-  { slot: "XXXVIII", title: "Angels of Caliban", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "Imperium Secundus & the Long Middle", rg: true, must: true, blurb: "Imperium Secundus concludes. Corax makes a defining decision." },
-  { slot: "XXXIX", title: "Praetorian of Dorn", author: "John French", rating: 9, kind: "Novel", section: "Imperium Secundus & the Long Middle", must: true, blurb: "Alpha Legion vs Imperial Fists on Terra. Huge end-reveal." },
-
-  { slot: "XL", title: "Corax", author: "Gav Thorpe", rating: 7, kind: "Anthology", section: "The Road to Terra", rg: true, must: true, blurb: "The Raven Guard anthology: Soulforge, Ravenlord, Weregeld, shorts. Your primary RG volume." },
-  { slot: "XLI", title: "The Master of Mankind", author: "Aaron Dembski-Bowden", rating: 9, kind: "Novel", section: "The Road to Terra", must: true, blurb: "The Emperor fighting the War in the Webway. Reframes everything." },
-  { slot: "XLII", title: "Garro", author: "James Swallow", rating: 8, kind: "Novel", section: "The Road to Terra", blurb: "Collected Garro audio dramas. If you liked Eisenstein, you'll love this." },
-  { slot: "XLIII", title: "Shattered Legions", author: "Various", rating: 7, kind: "Anthology", section: "The Road to Terra", rg: true, blurb: "Includes The Seventh Serpent (Raven Guard vs Alpha Legion)." },
-  { slot: "XLIV", title: "The Crimson King", author: "Graham McNeill", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "Magnus fragmented and searching. For Thousand Sons obsessives." },
-  { slot: "XLV", title: "Tallarn", author: "John French", rating: 7, kind: "Novel", section: "The Road to Terra", blurb: "The biggest tank battle in Imperial history." },
-  { slot: "XLVI", title: "Ruinstorm", author: "David Annandale", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "Imperium Secundus dissolves. Blood Angels' route to Terra." },
-  { slot: "XLVII", title: "Old Earth", author: "Nick Kyme", rating: 6, kind: "Novel", section: "The Road to Terra", rg: true, blurb: "Vulkan/Numeon continues with significant RG threads." },
-  { slot: "XLVIII", title: "The Burden of Loyalty", author: "Various", rating: 7, kind: "Anthology", section: "The Road to Terra", blurb: "Perpetual (Abnett, Oll Persson) is the standout." },
-  { slot: "XLIX", title: "Wolfsbane", author: "Guy Haley", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "Russ sent to kill Horus. Sets up a plot point that matters in Slaves to Darkness." },
-  { slot: "L", title: "Born of Flame", author: "Various", rating: 5, kind: "Anthology", section: "The Road to Terra", blurb: "Salamanders focus. Skippable." },
-  { slot: "LI", title: "Slaves to Darkness", author: "John French", rating: 9, kind: "Novel", section: "The Road to Terra", must: true, blurb: "Horus reuniting the traitor primarchs. The last pre-Siege book you cannot skip." },
-  { slot: "LII", title: "Heralds of the Siege", author: "Various", rating: 7, kind: "Anthology", section: "The Road to Terra", blurb: "Final run-up to Terra. Decent spread." },
-  { slot: "LIII", title: "Titandeath", author: "Guy Haley", rating: 6, kind: "Novel", section: "The Road to Terra", blurb: "The Beta-Garmon titan war. Concept better than execution." },
-  { slot: "LIV", title: "The Buried Dagger", author: "James Swallow", rating: 7, kind: "Novel", section: "The Road to Terra", blurb: "Mortarion's fall and Garro's final chapter. Better than its reputation." },
-
-  { slot: "SoT 1", title: "The Solar War", author: "John French", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Horus breaches the Sol system. Void war, desperate defences." },
-  { slot: "&#9670;", title: "Sons of the Selenar", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", rg: true, blurb: "Raven Guard-led recovery mission on the moon. Between SoT 1 and SoT 2." },
-  { slot: "SoT 2", title: "The Lost and the Damned", author: "Guy Haley", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Siege begins properly. Horus's forces hit the walls." },
-  { slot: "SoT 3", title: "The First Wall", author: "Gav Thorpe", rating: 7, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Lion's Gate Spaceport. Solar Auxilia, Imperial Fists, Raven Guard." },
-  { slot: "SoT 4", title: "Saturnine", author: "Dan Abnett", rating: 10, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Possibly the best book in the entire series. Abnett at his absolute peak." },
-  { slot: "&#9670;", title: "Fury of Magnus", author: "Graham McNeill", rating: 7, kind: "Novella", section: "The Siege of Terra", blurb: "Magnus vs the Emperor's Throne. Short, punchy, essential lore." },
-  { slot: "SoT 5", title: "Mortis", author: "John French", rating: 8, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "Inner palace breached. Titans, Custodes, grinding attrition." },
-  { slot: "SoT 6", title: "Warhawk", author: "Chris Wraight", rating: 9, kind: "Novel", section: "The Siege of Terra", must: true, blurb: "The Khan's last ride. Wraight gives the White Scars an ending that earns every tear." },
-  { slot: "SoT 7", title: "Echoes of Eternity", author: "Aaron Dembski-Bowden", rating: 9, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Sanguinius vs Ka'Bandha. Meaningful Raven Guard presence in the inner palace." },
-  { slot: "SoT 8", title: "The End and the Death: Volume I", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "The final act begins. Corax present in the inner sanctum." },
-  { slot: "SoT 9", title: "The End and the Death: Volume II", author: "Dan Abnett", rating: 8, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "Middle volume drags in places but the reveals are huge." },
-  { slot: "SoT 10", title: "The End and the Death: Volume III", author: "Dan Abnett", rating: 9, kind: "Novel", section: "The Siege of Terra", rg: true, must: true, blurb: "The duel. The death. The birth of 40K as we know it." },
+/* =====================================================================
+   DATA
+   verdict: essential | recommended | optional | skip
+   rating: entertainment out of 10 (null = too new to score)
+   rg: Raven Guard content in this book (level: lead | major | minor)
+   ===================================================================== */
+var PHASES = [
+  { id: 'p1', num: 'Part I', title: 'The Fall', sub: 'Horus turns. Isstvaan III and the Dropsite Massacre.' },
+  { id: 'p2', num: 'Part II', title: 'The War Widens', sub: 'Mars, Prospero, Lorgar and the secret war.' },
+  { id: 'p3', num: 'Part III', title: 'Calth and the Shadow Crusade', sub: 'The Word Bearers and World Eaters strike Ultramar.' },
+  { id: 'p4', num: 'Part IV', title: 'Imperium Secundus', sub: 'Guilliman’s second empire and the long middle of the war.' },
+  { id: 'p5', num: 'Part V', title: 'The Road to Terra', sub: 'The last campaigns before the Siege.' },
+  { id: 'p6', num: 'Part VI', title: 'The Siege of Terra', sub: 'The end of the Heresy.' }
 ];
 
-// ============================================================
-// State + rendering
-// ============================================================
-const STORAGE_KEY = 'hh-reading-log-v1';
+var BOOKS = [
+  // ---- Part I
+  { id: 'horus-rising', p: 'p1', no: 'I', t: 'Horus Rising', a: 'Dan Abnett', k: 'Novel', r: 10, v: 'essential', b: 'Horus at the height of the Great Crusade, seen through Garviel Loken. The best opening in the series.' },
+  { id: 'false-gods', p: 'p1', no: 'II', t: 'False Gods', a: 'Graham McNeill', k: 'Novel', r: 8, v: 'essential', b: 'Davin, the wound and the bargain. The moment Horus turns.' },
+  { id: 'galaxy-in-flames', p: 'p1', no: 'III', t: 'Galaxy in Flames', a: 'Ben Counter', k: 'Novel', r: 7, v: 'essential', b: 'Isstvaan III, the virus bombing and the purge of the loyalists. Plainer prose, unmissable plot.' },
+  { id: 'eisenstein', p: 'p1', no: 'IV', t: 'The Flight of the Eisenstein', a: 'James Swallow', k: 'Novel', r: 8, v: 'essential', b: 'Nathaniel Garro runs the warning to Terra. Pacy, and it launches a character who carries the saga.' },
+  { id: 'fulgrim', p: 'p1', no: 'V', t: 'Fulgrim', a: 'Graham McNeill', k: 'Novel', r: 7, v: 'essential', b: 'Fulgrim’s fall and the Dropsite Massacre on Isstvaan V. Slow middle, crucial ending.', rg: { l: 'minor', n: 'Corax in the first wave' } },
+  { id: 'dropsite', p: 'p1', no: '+', t: 'Dropsite Massacre', a: 'John French', k: 'Novel (2025)', r: null, v: 'optional', b: 'A 2025 retelling of Isstvaan V through Maloghurst, Khârn, an Iron Hands survivor and the Blood Crows. Read any time after Fulgrim.' },
 
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch (e) { return {}; }
-}
+  // ---- Part II
+  { id: 'descent', p: 'p2', no: 'VI', t: 'Descent of Angels', a: 'Mitchel Scanlon', k: 'Novel', r: 5, v: 'skip', b: 'Caliban before the Heresy. Slow and barely touches the main story. Dark Angels fans only.' },
+  { id: 'legion', p: 'p2', no: 'VII', t: 'Legion', a: 'Dan Abnett', k: 'Novel', r: 9, v: 'essential', b: 'The Alpha Legion and the Cabal. The final reveal reframes the whole war.' },
+  { id: 'abyss', p: 'p2', no: 'VIII', t: 'Battle for the Abyss', a: 'Ben Counter', k: 'Novel', r: 2, v: 'skip', b: 'Widely rated the weakest in the series. Nothing in it is needed later.' },
+  { id: 'mechanicum', p: 'p2', no: 'IX', t: 'Mechanicum', a: 'Graham McNeill', k: 'Novel', r: 8, v: 'recommended', b: 'The civil war on Mars. Titans, the Dark Mechanicum and Mars all matter later.' },
+  { id: 'tales', p: 'p2', no: 'X', t: 'Tales of Heresy', a: 'Anthology', k: 'Anthology', r: 7, v: 'recommended', b: 'Best: Blood Games (the Custodes), The Last Church (the Emperor) and After Desh’ea (Khârn meets Angron).' },
+  { id: 'fallen-angels', p: 'p2', no: 'XI', t: 'Fallen Angels', a: 'Mike Lee', k: 'Novel', r: 5, v: 'optional', b: 'Better than Descent of Angels. Read it if you want the Dark Angels thread that ends in Angels of Caliban.' },
+  { id: 'thousand-sons', p: 'p2', no: 'XII', t: 'A Thousand Sons', a: 'Graham McNeill', k: 'Novel', r: 9, v: 'essential', b: 'Magnus, his warning and the road to Prospero. Read Prospero Burns straight after.' },
+  { id: 'prospero-burns', p: 'p2', no: 'XV', t: 'Prospero Burns', a: 'Dan Abnett', k: 'Novel', r: 8, v: 'essential', b: 'The burning of Prospero from the Space Wolves’ side. Strange, layered and divisive.' },
+  { id: 'nemesis', p: 'p2', no: 'XIII', t: 'Nemesis', a: 'James Swallow', k: 'Novel', r: 6, v: 'optional', b: 'An Assassinorum strike team sent after Horus. A fun thriller with little consequence.' },
+  { id: 'first-heretic', p: 'p2', no: 'XIV', t: 'The First Heretic', a: 'Aaron Dembski-Bowden', k: 'Novel', r: 10, v: 'essential', b: 'Lorgar, Argel Tal and the real roots of the Heresy. One of the best in the saga.', rg: { l: 'minor', n: 'Corax duels Lorgar' } },
+  { id: 'aurelian', p: 'p2', no: '+', t: 'Aurelian', a: 'Aaron Dembski-Bowden', k: 'Novella', r: 8, v: 'recommended', b: 'Lorgar alone in the Eye of Terror. Bridges The First Heretic and Betrayer. Also inside Eye of Terra.' },
+  { id: 'age-of-darkness', p: 'p2', no: 'XVI', t: 'Age of Darkness', a: 'Anthology', k: 'Anthology', r: 7, v: 'recommended', b: 'Best: Savage Weapons (ADB), Rebirth (Wraight) and The Face of Treachery, the Raven Guard escape from Isstvaan.', rg: { l: 'major', n: 'The Face of Treachery' } },
+  { id: 'outcast-dead', p: 'p2', no: 'XVII', t: 'The Outcast Dead', a: 'Graham McNeill', k: 'Novel', r: 5, v: 'optional', b: 'Terra when the news of Isstvaan lands. Atmospheric but meandering.' },
+  { id: 'deliverance-lost', p: 'p2', no: 'XVIII', t: 'Deliverance Lost', a: 'Gav Thorpe', k: 'Novel', r: 6, v: 'recommended', b: 'Corax rebuilds his Legion with the Emperor’s gene-secrets while the Alpha Legion infiltrate. The core Raven Guard novel.', rg: { l: 'lead', n: 'Corax leads' } },
 
-function saveState(s) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) {}
-}
+  // ---- Part III
+  { id: 'know-no-fear', p: 'p3', no: 'XIX', t: 'Know No Fear', a: 'Dan Abnett', k: 'Novel', r: 10, v: 'essential', b: 'The betrayal at Calth, told almost in real time. Abnett at his sharpest.' },
+  { id: 'primarchs', p: 'p3', no: 'XX', t: 'The Primarchs', a: 'Anthology', k: '4 novellas', r: 7, v: 'optional', b: 'Fulgrim (The Reflection Crack’d), Ferrus (Feat of Iron), the Lion (The Lion) and Alpharius (The Serpent Beneath). The last two feed later arcs.' },
+  { id: 'fear-to-tread', p: 'p3', no: 'XXI', t: 'Fear to Tread', a: 'James Swallow', k: 'Novel', r: 7, v: 'recommended', b: 'Sanguinius and the Blood Angels at Signus. Referenced again and again later.' },
+  { id: 'shadows', p: 'p3', no: 'XXII', t: 'Shadows of Treachery', a: 'Anthology', k: 'Anthology', r: 8, v: 'recommended', b: 'Prince of Crows (ADB), The Crimson Fist (French), The Lightning Tower (Abnett) and Raven’s Flight, Corax’s escape from Isstvaan V.', rg: { l: 'lead', n: 'Raven’s Flight' } },
+  { id: 'angel-ext', p: 'p3', no: 'XXIII', t: 'Angel Exterminatus', a: 'Graham McNeill', k: 'Novel', r: 7, v: 'recommended', b: 'Fulgrim and Perturabo’s expedition into the Eye. The best Perturabo in the main series.', rg: { l: 'major', n: 'Sharrowkyn' } },
+  { id: 'butchers-nails', p: 'p3', no: '+', t: 'Butcher’s Nails', a: 'Aaron Dembski-Bowden', k: 'Audio drama', r: 8, v: 'recommended', b: 'An hour-long drama with Lorgar and Angron after Isstvaan. Listen right before Betrayer. Also inside Legacies of Betrayal.' },
+  { id: 'betrayer', p: 'p3', no: 'XXIV', t: 'Betrayer', a: 'Aaron Dembski-Bowden', k: 'Novel', r: 10, v: 'essential', b: 'Angron, Lorgar and the World Eaters burning Ultramar. Top three in the saga.' },
+  { id: 'mark-of-calth', p: 'p3', no: 'XXV', t: 'Mark of Calth', a: 'Anthology', k: 'Anthology', r: 6, v: 'optional', b: 'The aftermath of Calth. Uneven; The Underworld War (ADB) is the pick.' },
+  { id: 'honoured', p: 'p3', no: '+', t: 'The Honoured & The Unburdened', a: 'Rob Sanders / David Annandale', k: 'Novella pair', r: 6, v: 'optional', b: 'The underground war on Calth, one novella per side. Not collected in any numbered book.' },
 
-let state = loadState();
-let currentFilter = 'all';
+  // ---- Part IV
+  { id: 'vulkan-lives', p: 'p4', no: 'XXVI', t: 'Vulkan Lives', a: 'Nick Kyme', k: 'Novel', r: 5, v: 'optional', b: 'Curze holds Vulkan captive. Grim and repetitive; only needed for Vulkan’s arc.', rg: { l: 'minor', n: 'A false Corax' } },
+  { id: 'unremembered', p: 'p4', no: 'XXVII', t: 'The Unremembered Empire', a: 'Dan Abnett', k: 'Novel', r: 8, v: 'essential', b: 'Guilliman’s Imperium Secundus, with Sanguinius, the Lion and Curze on Macragge.', rg: { l: 'minor', n: 'Verano Ebb’s squad' } },
+  { id: 'brotherhood-storm', p: 'p4', no: '+', t: 'Brotherhood of the Storm', a: 'Chris Wraight', k: 'Novella', r: 8, v: 'recommended', b: 'The White Scars at Chondax. The direct prologue to Scars. Also inside Legacies of Betrayal.' },
+  { id: 'scars', p: 'p4', no: 'XXVIII', t: 'Scars', a: 'Chris Wraight', k: 'Novel', r: 9, v: 'essential', b: 'Jaghatai Khan decides which side he is on. Sets up The Path of Heaven and Warhawk.' },
+  { id: 'vengeful', p: 'p4', no: 'XXIX', t: 'Vengeful Spirit', a: 'Graham McNeill', k: 'Novel', r: 7, v: 'recommended', b: 'Horus at Molech. A slow start, but what Horus gains there drives the Siege.' },
+  { id: 'pythos', p: 'p4', no: 'XXX', t: 'The Damnation of Pythos', a: 'David Annandale', k: 'Novel', r: 4, v: 'skip', b: 'Horror on a death world. Widely rated among the weakest.' },
+  { id: 'legacies', p: 'p4', no: 'XXXI', t: 'Legacies of Betrayal', a: 'Anthology', k: 'Anthology', r: 7, v: 'optional', b: 'Shorts and audio scripts. Contains Brotherhood of the Storm, Butcher’s Nails and Heart of the Conqueror, plus two Raven Guard pieces.', rg: { l: 'major', n: 'The Divine Word, Kryptos' } },
+  { id: 'deathfire', p: 'p4', no: 'XXXII', t: 'Deathfire', a: 'Nick Kyme', k: 'Novel', r: 6, v: 'optional', b: 'The Salamanders carry Vulkan’s body toward Nocturne. Vulkan arc only.' },
+  { id: 'war-without-end', p: 'p4', no: 'XXXIII', t: 'War Without End', a: 'Anthology', k: 'Anthology', r: 6, v: 'optional', b: 'Twenty-one short pieces. Dip in; Lord of the Red Sands (ADB) is a highlight.' },
+  { id: 'pharos', p: 'p4', no: 'XXXIV', t: 'Pharos', a: 'Guy Haley', k: 'Novel', r: 8, v: 'recommended', b: 'The Night Lords attack Sotha and the alien beacon that lights Imperium Secundus. Dantioch is a highlight.' },
+  { id: 'eye-of-terra', p: 'p4', no: 'XXXV', t: 'Eye of Terra', a: 'Anthology', k: 'Anthology', r: 7, v: 'optional', b: 'Contains the Aurelian novella plus fifteen shorts. Skip it if you’ve heard Aurelian.' },
+  { id: 'path-of-heaven', p: 'p4', no: 'XXXVI', t: 'The Path of Heaven', a: 'Chris Wraight', k: 'Novel', r: 9, v: 'essential', b: 'The White Scars fight their way toward Terra. Required before Warhawk.' },
+  { id: 'silent-war', p: 'p4', no: 'XXXVII', t: 'The Silent War', a: 'Anthology', k: 'Anthology', r: 7, v: 'optional', b: 'Sisters of Silence, Malcador’s Knights-Errant and the novella The Purge.' },
+  { id: 'angels-caliban', p: 'p4', no: 'XXXVIII', t: 'Angels of Caliban', a: 'Gav Thorpe', k: 'Novel', r: 7, v: 'recommended', b: 'Luther’s revolt on Caliban and the Lion’s war with Curze. Ends the Dark Angels’ Heresy arc.' },
+  { id: 'praetorian', p: 'p4', no: 'XXXIX', t: 'Praetorian of Dorn', a: 'John French', k: 'Novel', r: 9, v: 'essential', b: 'The Alpha Legion strike at Terra and Dorn hunts them. A big reveal at the end.' },
 
-const PRE_READ = [
-  "Horus Rising","False Gods","Galaxy in Flames","The Flight of the Eisenstein",
-  "Fulgrim","Legion","Mechanicum","Tales of Heresy","A Thousand Sons","Prospero Burns",
-  "The First Heretic","Deliverance Lost","Know No Fear","Fear to Tread","Angel Exterminatus",
-  "Betrayer","The Unremembered Empire","Pharos","Angels of Caliban","Praetorian of Dorn",
-  "Corax","The Master of Mankind","Garro","Slaves to Darkness","The Burden of Loyalty"
+  // ---- Part V
+  { id: 'corax', p: 'p5', no: 'XL', t: 'Corax', a: 'Gav Thorpe', k: 'Collection', r: 7, v: 'recommended', b: 'Corax’s guerrilla war: Soulforge, Ravenlord, Raptor and Weregeld, plus three shorts. Essential if you follow the Raven Guard.', rg: { l: 'lead', n: 'Corax leads' } },
+  { id: 'master', p: 'p5', no: 'XLI', t: 'The Master of Mankind', a: 'Aaron Dembski-Bowden', k: 'Novel', r: 9, v: 'essential', b: 'The Emperor’s war in the Webway beneath the Palace. Changes how you read the Siege.' },
+  { id: 'garro', p: 'p5', no: 'XLII', t: 'Garro', a: 'James Swallow', k: 'Collection', r: 7, v: 'recommended', b: 'Garro’s missions for Malcador, expanded from the audio dramas.' },
+  { id: 'shattered', p: 'p5', no: 'XLIII', t: 'Shattered Legions', a: 'Anthology', k: 'Anthology', r: 7, v: 'optional', b: 'Iron Hands, Salamanders and Raven Guard survivors fighting on. The Seventh Serpent (McNeill) is the standout.', rg: { l: 'major', n: 'The Seventh Serpent' } },
+  { id: 'crimson-king', p: 'p5', no: 'XLIV', t: 'The Crimson King', a: 'Graham McNeill', k: 'Novel', r: 7, v: 'optional', b: 'Magnus, shattered after Prospero, pulls himself back together. Sets up his part in the Siege.' },
+  { id: 'tallarn', p: 'p5', no: 'XLV', t: 'Tallarn', a: 'John French', k: '4 novellas', r: 7, v: 'optional', b: 'The largest tank war in Imperial history, in four parts.' },
+  { id: 'ruinstorm', p: 'p5', no: 'XLVI', t: 'Ruinstorm', a: 'David Annandale', k: 'Novel', r: 6, v: 'recommended', b: 'How Sanguinius gets to Terra and Guilliman doesn’t. Plot-important, prose so-so.', rg: { l: 'minor', n: 'one legionary' } },
+  { id: 'old-earth', p: 'p5', no: 'XLVII', t: 'Old Earth', a: 'Nick Kyme', k: 'Novel', r: 6, v: 'optional', b: 'Vulkan’s road back to Terra while the Shattered Legions alliance frays.', rg: { l: 'major', n: 'Dalcoth & Norn' } },
+  { id: 'burden', p: 'p5', no: 'XLVIII', t: 'The Burden of Loyalty', a: 'Anthology', k: 'Anthology', r: 7, v: 'optional', b: 'Perpetual (Abnett) is the standout. Also contains The Wolf King and Cybernetica.' },
+  { id: 'wolfsbane', p: 'p5', no: 'XLIX', t: 'Wolfsbane', a: 'Guy Haley', k: 'Novel', r: 7, v: 'recommended', b: 'Russ hunts Horus. Explains the state Horus is in for Slaves to Darkness.' },
+  { id: 'born-of-flame', p: 'p5', no: 'L', t: 'Born of Flame', a: 'Nick Kyme', k: 'Collection', r: 5, v: 'optional', b: 'Salamanders collection: Promethean Sun, Scorched Earth and Sons of the Forge.' },
+  { id: 'slaves', p: 'p5', no: 'LI', t: 'Slaves to Darkness', a: 'John French', k: 'Novel', r: 9, v: 'essential', b: 'Horus gathers the traitor Primarchs for Terra. The last essential before the Siege.' },
+  { id: 'heralds', p: 'p5', no: 'LII', t: 'Heralds of the Siege', a: 'Anthology', k: 'Anthology', r: 7, v: 'optional', b: 'The run-up to Terra. Includes The Board is Set and Thorpe’s two Raven Guard epilogues.', rg: { l: 'major', n: 'The Grey Raven, Valerius' } },
+  { id: 'titandeath', p: 'p5', no: 'LIII', t: 'Titandeath', a: 'Guy Haley', k: 'Novel', r: 6, v: 'optional', b: 'The Titan war at Beta-Garmon. A big concept, unevenly delivered.' },
+  { id: 'buried-dagger', p: 'p5', no: 'LIV', t: 'The Buried Dagger', a: 'James Swallow', k: 'Novel', r: 8, v: 'essential', b: 'Mortarion’s damnation and the origins of the Grey Knights. Sets up the Death Guard’s Siege. Finish it before The Solar War.' },
+
+  // ---- Part VI
+  { id: 'solar-war', p: 'p6', no: 'I', sot: 1, t: 'The Solar War', a: 'John French', k: 'Novel', r: 8, v: 'essential', b: 'Horus’s fleets break into the Sol System. Void war, and faces back from Horus Rising.' },
+  { id: 'selenar', p: 'p6', no: '+', t: 'Sons of the Selenar', a: 'Graham McNeill', k: 'Novella', r: 7, v: 'optional', b: 'A Shattered Legions raid on Luna during the Solar War. Read straight after The Solar War.', rg: { l: 'major', n: 'Sharrowkyn' } },
+  { id: 'lost-damned', p: 'p6', no: 'II', sot: 1, t: 'The Lost and the Damned', a: 'Guy Haley', k: 'Novel', r: 8, v: 'essential', b: 'The landings on Terra. Huge set pieces, plus the human cost on the ground.' },
+  { id: 'first-wall', p: 'p6', no: 'III', sot: 1, t: 'The First Wall', a: 'Gav Thorpe', k: 'Novel', r: 7, v: 'essential', b: 'The battle for the Lion’s Gate space port. Slower, but it sets the board.' },
+  { id: 'saturnine', p: 'p6', no: 'IV', sot: 1, t: 'Saturnine', a: 'Dan Abnett', k: 'Novel', r: 10, v: 'essential', b: 'Dorn’s gambit at the Saturnine Wall. A contender for the best book in the saga.' },
+  { id: 'fury-magnus', p: 'p6', no: '+', t: 'Fury of Magnus', a: 'Graham McNeill', k: 'Novella', r: 7, v: 'recommended', b: 'Magnus strikes at the Palace. Set directly after Saturnine.' },
+  { id: 'mortis', p: 'p6', no: 'V', sot: 1, t: 'Mortis', a: 'John French', k: 'Novel', r: 8, v: 'essential', b: 'The Siege at its bleakest: Mortarion’s plague, the Titan war and the Palace burning.' },
+  { id: 'knight-grey', p: 'p6', no: '+', t: 'Garro: Knight of Grey', a: 'James Swallow', k: 'Novella', r: 7, v: 'recommended', b: 'Garro’s last mission, set between Mortis and Warhawk.' },
+  { id: 'warhawk', p: 'p6', no: 'VI', sot: 1, t: 'Warhawk', a: 'Chris Wraight', k: 'Novel', r: 9, v: 'essential', b: 'Jaghatai Khan holds the Lion’s Gate. The White Scars’ ending, and a great one.' },
+  { id: 'echoes', p: 'p6', no: 'VII', sot: 1, t: 'Echoes of Eternity', a: 'Aaron Dembski-Bowden', k: 'Novel', r: 10, v: 'essential', b: 'Sanguinius makes his stand against Angron. Many readers’ favourite of the Siege.', rg: { l: 'minor', n: 'Corax mentioned' } },
+  { id: 'teatd1', p: 'p6', no: 'VIII', sot: 1, t: 'The End and the Death: Volume I', a: 'Dan Abnett', k: 'Novel', r: 8, v: 'essential', b: 'The last defence of the Sanctum begins. Abnett goes big and strange.' },
+  { id: 'teatd2', p: 'p6', no: 'IX', sot: 1, t: 'The End and the Death: Volume II', a: 'Dan Abnett', k: 'Novel', r: 8, v: 'essential', b: 'The road to the Vengeful Spirit. A slower middle, with huge reveals.', rg: { l: 'minor', n: 'Aerim Lur' } },
+  { id: 'teatd3', p: 'p6', no: 'X', sot: 1, t: 'The End and the Death: Volume III', a: 'Dan Abnett', k: 'Novel', r: 9, v: 'essential', b: 'The Emperor and Horus. The ending the saga was built for.' },
+  { id: 'era-of-ruin', p: 'p6', no: '+', t: 'Era of Ruin', a: 'Anthology', k: 'Anthology (2025)', r: null, v: 'recommended', b: 'Eight epilogue stories by the Siege authors, set in the aftermath. Read it last.' }
 ];
 
-if (Object.keys(state).length === 0) {
-  PRE_READ.forEach(function (t) { state[t] = true; });
-  saveState(state);
+/* Raven Guard path. ref = a book in the guide; own items have their own tick.
+   in = the guide book that contains it (finishing that book counts). */
+var RG_ACTS = [
+  { num: 'Before', title: 'The Great Crusade', sub: 'Optional background. Not part of the Heresy itself.', items: [
+    { id: 'lord-of-shadows', t: 'Corax: Lord of Shadows', a: 'Guy Haley', k: 'Primarchs series novel', role: 'lead',
+      where: 'Standalone (The Primarchs series, book 10)', when: 'Any time. Best before Deliverance Lost.',
+      x: 'Corax’s Great Crusade war against the Carinae void-cities. Character background for everything after.' },
+    { id: 'night-haunter', t: 'Konrad Curze: The Night Haunter', a: 'Guy Haley', k: 'Primarchs series novel', role: 'minor',
+      where: 'Standalone (The Primarchs series)', when: 'Any time. Optional.',
+      x: 'Corax confronts Curze during the same campaign (chapters 5–6). Seeds their rivalry at Isstvaan.' }
+  ] },
+  { num: 'Act I', title: 'Isstvaan V', sub: 'The Dropsite Massacre and the escape.', items: [
+    { ref: 'fulgrim', role: 'minor', when: 'Before Raven’s Flight.', x: 'Corax lands in the first wave. Told in passing.' },
+    { ref: 'first-heretic', role: 'minor', when: 'Before Raven’s Flight.', x: 'Chapter 27: Corax nearly kills Lorgar until Curze intervenes.' },
+    { id: 'ravens-flight', t: 'Raven’s Flight', a: 'Gav Thorpe', k: 'Audio drama', role: 'lead', in: 'shadows',
+      where: 'Shadows of Treachery (XXII), or the standalone 1-hour audio drama', when: 'Start here. Chronologically first, even though it sits in XXII.',
+      x: 'Ninety-eight days of guerrilla war on Isstvaan V, ending in rescue.' },
+    { id: 'face-of-treachery', t: 'The Face of Treachery', a: 'Gav Thorpe', k: 'Short story', role: 'major', in: 'age-of-darkness',
+      where: 'Age of Darkness (XVI)', when: 'Straight after Raven’s Flight.',
+      x: 'Branne’s rescue fleet runs the traitor blockade. An Alpha Legion agent tips the battle.' }
+  ] },
+  { num: 'Act II', title: 'Deliverance', sub: 'Rebuilding the Legion, and the price of it.', items: [
+    { ref: 'deliverance-lost', role: 'lead', when: 'After The Face of Treachery.', x: 'Corax takes the Emperor’s gene-secrets home to make new legionaries. The Alpha Legion poison the work and the Raptors are born.' },
+    { id: 'divine-word', t: 'The Divine Word', a: 'Gav Thorpe', k: 'Short story', role: 'major', in: 'legacies',
+      where: 'Legacies of Betrayal (XXXI), or the standalone 43-minute audio', when: 'After Deliverance Lost (Thorpe’s own order).',
+      x: 'Marcus Valerius, an Imperial Army officer fighting beside the Raven Guard, starts to doubt his scorn for the Emperor’s cult.' }
+  ] },
+  { num: 'Act III', title: 'The Shadow War', sub: 'All six pieces are in the Corax collection (XL), in this order.', items: [
+    { id: 'soulforge', t: 'Soulforge', a: 'Gav Thorpe', k: 'Novella', role: 'lead', in: 'corax',
+      where: 'Corax (XL)', when: 'After The Divine Word. The collection can follow Deliverance Lost directly.',
+      x: 'Corax infiltrates the forge world Constanix II and learns more about his own nature.' },
+    { id: 'shadowmasters', t: 'The Shadowmasters', a: 'Gav Thorpe', k: 'Short story', role: 'major', in: 'corax',
+      where: 'Corax (XL)', when: 'Alongside Soulforge.',
+      x: 'A Mor Deythan squad’s covert strike on Atlas, the same battle seen from the shadows.' },
+    { id: 'ravenlord', t: 'Ravenlord', a: 'Gav Thorpe', k: 'Novella', role: 'lead', in: 'corax',
+      where: 'Corax (XL)', when: 'After Soulforge.',
+      x: 'Corax gathers loyalist strays, liberates the prison world Carandiru and purges a Fabius Bile laboratory.' },
+    { id: 'value-of-fear', t: 'The Value of Fear', a: 'Gav Thorpe', k: 'Short story', role: 'major', in: 'corax',
+      where: 'Corax (XL)', when: 'Alongside Ravenlord.',
+      x: 'Raven Guard and a loyalist Night Lord put down an Alpha Legion rising on Carandiru.' },
+    { id: 'raptor', t: 'Raptor', a: 'Gav Thorpe', k: 'Audio drama', role: 'lead', in: 'corax',
+      where: 'Corax (XL)', when: 'After Ravenlord.',
+      x: 'Navar Hef and the mutated Raptors meet a Space Wolves pack sent to judge Corax’s loyalty.' },
+    { id: 'weregeld', t: 'Weregeld', a: 'Gav Thorpe', k: 'Novella', role: 'lead', in: 'corax',
+      where: 'Corax (XL)', when: 'Last. Set later in the war than the rest of the collection.',
+      x: 'The Battle of Yarant beside the Space Wolves. Corax chooses to keep fighting from the shadows. His last on-page scenes in the Heresy.' }
+  ] },
+  { num: 'Coda', title: 'Before Terra', sub: 'Thorpe’s two epilogues. Corax sends others; he does not go himself.', items: [
+    { id: 'grey-raven', t: 'The Grey Raven', a: 'Gav Thorpe', k: 'Short story', role: 'major', in: 'heralds',
+      where: 'Heralds of the Siege (LII)', when: 'After Weregeld.',
+      x: 'On Corax’s order, Librarian Balsar Kurthuri goes to Terra to face judgement.' },
+    { id: 'valerius', t: 'Valerius', a: 'Gav Thorpe', k: 'Audio drama', role: 'major', in: 'heralds',
+      where: 'Heralds of the Siege (LII)', when: 'After The Grey Raven, around Titandeath.',
+      x: 'Corax sends Marcus Valerius to Beta-Garmon, the war Titandeath covers.' }
+  ] },
+  { num: 'Thread', title: 'Nykona Sharrowkyn', sub: 'The Raven Guard who fights on with the Shattered Legions.', items: [
+    { ref: 'angel-ext', role: 'major', when: 'Where the thread starts.', x: 'Sharrowkyn joins the Iron Hands’ pursuit of Fulgrim and duels Lucius.' },
+    { id: 'kryptos', t: 'Kryptos', a: 'Graham McNeill', k: 'Short story', role: 'major', in: 'legacies',
+      where: 'Legacies of Betrayal (XXXI)', when: 'After Angel Exterminatus.',
+      x: 'A short Sisypheum story that continues Sharrowkyn’s thread.' },
+    { id: 'seventh-serpent', t: 'The Seventh Serpent', a: 'Graham McNeill', k: 'Novella', role: 'major', in: 'shattered',
+      where: 'Shattered Legions (XLIII), or Audible’s Novella Collection 5', when: 'After Kryptos.',
+      x: 'Meduson’s Shattered Legions raid an Alpha Legion outpost, with Sharrowkyn aboard the Sisypheum.' },
+    { ref: 'selenar', role: 'major', when: 'After The Solar War.', x: 'The Sisypheum’s crew raid Luna for a gene archive. Sharrowkyn’s last mission.' }
+  ] },
+  { num: 'Cameos', title: 'Brief appearances', sub: 'Raven Guard turn up here, but you don’t need these for their story.', items: [
+    { ref: 'unremembered', role: 'minor', x: 'Captain Verano Ebb’s squad reaches Macragge. Corax is not there.' },
+    { ref: 'vulkan-lives', role: 'minor', x: 'A Corax rescue that turns out to be one of Curze’s illusions.' },
+    { ref: 'old-earth', role: 'major', x: 'Captain Dalcoth and Apothecary Norn, as the Shattered Legions alliance cracks.' },
+    { ref: 'ruinstorm', role: 'minor', x: 'One Raven Guard legionary with Sanguinius’ fleet.' },
+    { ref: 'echoes', role: 'minor', x: 'Word reaches Terra that Corax is following Guilliman’s relief fleet. He never arrives in the books.' },
+    { ref: 'teatd2', role: 'minor', x: 'Aerim Lur, a Raven Guard officer among the Palace’s last defenders.' }
+  ] },
+  { num: 'After', title: 'Nevermore', sub: 'Beyond the Heresy.', items: [
+    { id: 'shadow-of-past', t: 'Shadow of the Past', a: 'Gav Thorpe', k: 'Short story', role: 'lead',
+      where: 'Sons of the Emperor (Primarchs anthology)', when: 'After the Siege.',
+      x: 'A warp-changed Corax in the Eye of Terror, hunting Lorgar. His departure itself (“Nevermore”) is tabletop lore, not shown in a novel.' }
+  ] }
+];
+
+var CORE_RG = ['ravens-flight', 'face-of-treachery', 'deliverance-lost', 'divine-word', 'soulforge', 'shadowmasters', 'ravenlord', 'value-of-fear', 'raptor', 'weregeld', 'grey-raven', 'valerius'];
+
+/* Stable order for progress codes. Append new ids only, never reorder. */
+var ORDER = ['horus-rising','false-gods','galaxy-in-flames','eisenstein','fulgrim','dropsite','descent','legion','abyss','mechanicum','tales','fallen-angels','thousand-sons','prospero-burns','nemesis','first-heretic','aurelian','age-of-darkness','outcast-dead','deliverance-lost','know-no-fear','primarchs','fear-to-tread','shadows','angel-ext','butchers-nails','betrayer','mark-of-calth','honoured','vulkan-lives','unremembered','brotherhood-storm','scars','vengeful','pythos','legacies','deathfire','war-without-end','pharos','eye-of-terra','path-of-heaven','silent-war','angels-caliban','praetorian','corax','master','garro','shattered','crimson-king','tallarn','ruinstorm','old-earth','burden','wolfsbane','born-of-flame','slaves','heralds','titandeath','buried-dagger','solar-war','selenar','lost-damned','first-wall','saturnine','fury-magnus','mortis','knight-grey','warhawk','echoes','teatd1','teatd2','teatd3','era-of-ruin','lord-of-shadows','night-haunter','ravens-flight','face-of-treachery','divine-word','soulforge','shadowmasters','ravenlord','value-of-fear','raptor','weregeld','grey-raven','valerius','kryptos','seventh-serpent','shadow-of-past'];
+
+/* Snapshot of your Audible library from the screenshot you shared (July 2026). */
+var SEED = { v: 2, updated: Date.UTC(2026, 6, 20), s: {
+  'horus-rising':'d','false-gods':'d','galaxy-in-flames':'d','eisenstein':'d','fulgrim':'d','legion':'d','mechanicum':'d','tales':'d',
+  'thousand-sons':'d','prospero-burns':'d','first-heretic':'d','age-of-darkness':'d','deliverance-lost':'d','know-no-fear':'d',
+  'fear-to-tread':'d','angel-ext':'d','betrayer':'d','unremembered':'d','pharos':'d','angels-caliban':'d','praetorian':'d',
+  'corax':'d','master':'d','garro':'d','ruinstorm':'d','burden':'d','slaves':'d','titandeath':'d',
+  'shadows':'l','nemesis':'l','old-earth':'l','buried-dagger':'l','solar-war':'l'
+} };
+
+/* The copy of this tracker that syncs through a Claude account. */
+var SYNCED_URL = 'https://claude.ai/artifact/1m7hEUWST2W3NvZszEabVX';
+
+/* Titles used by earlier versions of this page, for migrating old saves. */
+var LEGACY_TITLES = {};
+BOOKS.forEach(function (b) { LEGACY_TITLES[b.t] = b.id; });
+LEGACY_TITLES['Raven\'s Flight'] = 'ravens-flight';
+LEGACY_TITLES['Raven’s Flight'] = 'ravens-flight';
+LEGACY_TITLES['Butcher\'s Nails'] = 'butchers-nails';
+LEGACY_TITLES['The Honoured & The Unburdened'] = 'honoured';
+
+/* =====================================================================
+   HELPERS
+   ===================================================================== */
+var byId = {};
+BOOKS.forEach(function (b, i) { b.idx = i; byId[b.id] = b; });
+var VERDICT = { essential: 'Essential', recommended: 'Recommended', optional: 'Optional', skip: 'Skip' };
+var PATH_LABEL = { essential: 'Essentials', recommended: 'Recommended', all: 'Everything' };
+var ROLE = { lead: 'Lead', major: 'Major role', minor: 'Cameo' };
+var ICON_SUN = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.4 1.4M11.55 11.55l1.4 1.4M3.05 12.95l1.4-1.4M11.55 4.45l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>';
+var ICON_MOON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.6 10.1A5.9 5.9 0 0 1 5.9 2.4a5.9 5.9 0 1 0 7.7 7.7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path></svg>';
+var $ = function (id) { return document.getElementById(id); };
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
 }
-
-function keyOf(b) { return b.title; }
-
-function bookMatchesFilter(b) {
-  const isRead = !!state[keyOf(b)];
-  switch (currentFilter) {
-    case 'all': return true;
-    case 'toread': return !isRead;
-    case 'read': return isRead;
-    case 'rg': return !!b.rg;
-    case 'must': return !!b.must;
-  }
-  return true;
+function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function validState(o) { return o && typeof o === 'object' && o.s && typeof o.s === 'object' && typeof o.updated === 'number'; }
+function cleanMap(m) {
+  var out = {};
+  Object.keys(m || {}).forEach(function (k) { if (ORDER.indexOf(k) !== -1 && (m[k] === 'd' || m[k] === 'l')) out[k] = m[k]; });
+  return out;
 }
+function isHosted() { return !(window.claude && typeof window.claude.use === 'function'); }
 
-function renderList() {
-  const root = document.getElementById('list');
-  root.innerHTML = '';
+/* =====================================================================
+   STATE
+   ===================================================================== */
+var LS_KEY = 'hh-progress-v2';
+var LS_OLD = 'hh-reading-log-v1';
+var LS_UI = 'hh-ui-v2';
+var LS_THEME = 'hh-theme';
 
-  const visible = BOOKS.filter(bookMatchesFilter);
+function loadInitial() {
+  var candidates = [];
+  var embedded = null;
+  try { embedded = JSON.parse(($('hh-saved') || {}).textContent || 'null'); } catch (e) { embedded = null; }
+  candidates.push(clone(SEED));
+  if (validState(embedded)) candidates.push(embedded);
+  var local = null;
+  try { local = JSON.parse(lsGet(LS_KEY) || 'null'); } catch (e) { local = null; }
+  if (validState(local)) candidates.push(local);
+  var best = candidates.reduce(function (a, b) { return b.updated > a.updated ? b : a; });
+  best = { v: 2, updated: best.updated, s: cleanMap(best.s) };
 
-  if (visible.length === 0) {
-    document.getElementById('empty').classList.remove('hidden');
-    return;
-  }
-  document.getElementById('empty').classList.add('hidden');
-
-  let currentSection = null;
-  visible.forEach(function (b) {
-    if (b.section !== currentSection) {
-      currentSection = b.section;
-      const h = document.createElement('h2');
-      h.className = 'section-head';
-      const sectionBooks = visible.filter(function (x) { return x.section === b.section; });
-      const sectionRead = sectionBooks.filter(function (x) { return state[keyOf(x)]; }).length;
-      h.innerHTML = '<span class="title-text">' + b.section + '</span><span class="tag">' + sectionRead + ' / ' + sectionBooks.length + '</span>';
-      root.appendChild(h);
+  // One-time migration from the earlier tracker (title -> true).
+  if (!validState(local)) {
+    var old = null;
+    try { old = JSON.parse(lsGet(LS_OLD) || 'null'); } catch (e) { old = null; }
+    if (old && typeof old === 'object') {
+      var added = 0;
+      Object.keys(old).forEach(function (title) {
+        var id = LEGACY_TITLES[title];
+        if (id && old[title] && best.s[id] !== 'd') { best.s[id] = 'd'; added++; }
+      });
+      if (added) best.updated = Date.now();
+      lsSet(LS_KEY, JSON.stringify(best));
     }
-
-    const row = document.createElement('article');
-    row.className = 'book' + (state[keyOf(b)] ? ' read' : '');
-    row.innerHTML =
-      '<div class="slot">' + b.slot + '</div>' +
-      '<div class="book-body">' +
-        '<div class="book-title-row">' +
-          '<span class="book-title">' + b.title + '</span>' +
-          '<span class="book-author">' + b.author + '</span>' +
-        '</div>' +
-        '<div class="book-blurb">' + b.blurb + '</div>' +
-        '<div class="book-meta">' +
-          '<span class="rating">' + b.rating + ' / 10</span>' +
-          '<span class="kind">' + b.kind + '</span>' +
-          (b.must ? '<span class="must">Must-read</span>' : '') +
-          (b.rg ? '<span class="rg">Raven Guard</span>' : '') +
-        '</div>' +
-      '</div>' +
-      '<label class="check">' +
-        '<input type="checkbox" ' + (state[keyOf(b)] ? 'checked' : '') + ' data-title="' + b.title.replace(/"/g, '&quot;') + '" />' +
-      '</label>';
-    root.appendChild(row);
-  });
-
-  root.querySelectorAll('input[type=checkbox]').forEach(function (cb) {
-    cb.addEventListener('change', function (e) {
-      const title = e.target.dataset.title;
-      if (e.target.checked) state[title] = true;
-      else delete state[title];
-      saveState(state);
-      renderAll();
-    });
-  });
-}
-
-function renderStats() {
-  const total = BOOKS.length;
-  const read = BOOKS.filter(function (b) { return state[keyOf(b)]; }).length;
-  const pct = total ? Math.round((read / total) * 100) : 0;
-  document.getElementById('progress-count').textContent = read;
-  document.getElementById('progress-total').textContent = total;
-  document.getElementById('progress-pct').textContent = pct + '% complete';
-  document.getElementById('progress-fill').style.width = pct + '%';
-
-  document.getElementById('count-all').textContent = total;
-  document.getElementById('count-toread').textContent = BOOKS.filter(function (b) { return !state[keyOf(b)]; }).length;
-  document.getElementById('count-read').textContent = read;
-  document.getElementById('count-rg').textContent = BOOKS.filter(function (b) { return !!b.rg; }).length;
-  document.getElementById('count-must').textContent = BOOKS.filter(function (b) { return !!b.must; }).length;
-}
-
-function renderAll() { renderStats(); renderList(); }
-
-document.querySelectorAll('.filters button').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    document.querySelectorAll('.filters button').forEach(function (b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    renderList();
-  });
-});
-
-document.getElementById('reset-btn').addEventListener('click', function () {
-  if (confirm('Reset all reading progress? This cannot be undone.')) {
-    state = {};
-    saveState(state);
-    renderAll();
   }
-});
+  return best;
+}
 
-document.getElementById('export-btn').addEventListener('click', function () {
-  const read = BOOKS.filter(function (b) { return state[keyOf(b)]; }).map(function (b) { return '[x] ' + b.slot + ' - ' + b.title + ' -- ' + b.author; });
-  const unread = BOOKS.filter(function (b) { return !state[keyOf(b)]; }).map(function (b) { return '[ ] ' + b.slot + ' - ' + b.title + ' -- ' + b.author; });
-  const text = 'HORUS HERESY - READING LOG\n\nRead (' + read.length + '):\n' + read.join('\n') + '\n\nTo read (' + unread.length + '):\n' + unread.join('\n');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(
-      function () { alert('Copied to clipboard.'); },
-      function () { fallbackExport(text); }
-    );
+var S = loadInitial();
+var UI = (function () {
+  var d = { path: 'recommended', hideDone: false, open: {} };
+  try { var u = JSON.parse(lsGet(LS_UI) || 'null'); if (u && typeof u === 'object') { d.path = PATH_LABEL[u.path] ? u.path : d.path; d.hideDone = !!u.hideDone; d.open = u.open || {}; } } catch (e) {}
+  return d;
+})();
+var search = '';
+var pendingImport = null;
+var confirmReset = null;
+
+function saveUI() { lsSet(LS_UI, JSON.stringify({ path: UI.path, hideDone: UI.hideDone, open: UI.open })); }
+function st(id) { return S.s[id]; }
+function isDone(id) { return S.s[id] === 'd'; }
+function rgDone(item) {
+  if (item.ref) return isDone(item.ref);
+  return isDone(item.id) || (item.in ? isDone(item.in) : false);
+}
+
+/* ---- Sync backend: Claude account (db) when available, else this browser ---- */
+var store = { mode: 'local', ref: null, ready: false, writing: false, queued: false, readOnly: false, edits: {} };
+
+function setStatus(id, value) {
+  if (store.readOnly) return;
+  if (value) S.s[id] = value; else delete S.s[id];
+  S.updated = Date.now();
+  if (!store.ready) store.edits[id] = value || null;
+  lsSet(LS_KEY, JSON.stringify(S));
+  pushRemote();
+  renderAll();
+}
+function replaceAll(map) {
+  if (store.readOnly) return;
+  S = { v: 2, updated: Date.now(), s: cleanMap(map) };
+  if (!store.ready) { store.edits = {}; ORDER.forEach(function (k) { store.edits[k] = S.s[k] || null; }); }
+  lsSet(LS_KEY, JSON.stringify(S));
+  pushRemote();
+  renderAll();
+}
+
+var pushTimer = null;
+function pushRemote() {
+  if (store.mode !== 'db' || !store.ready) return;
+  store.dirty = true;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(flush, 500);
+}
+function flush() {
+  if (!store.ref) return;
+  if (store.writing) { store.queued = true; return; }
+  store.dirty = false;
+  store.writing = true;
+  var body = { v: 2, updated: S.updated, s: clone(S.s) };
+  store.ref.set(body).then(function () {
+    store.writing = false;
+    if (store.queued) { store.queued = false; flush(); }
+  }, function (e) {
+    store.writing = false;
+    if (e && (e.code === 'invalid_argument' || e.code === 'not_granted')) { store.readOnly = true; renderAll(); }
+    else if (e && e.code === 'unavailable') { setTimeout(flush, 1500 + Math.random() * 1000); }
+  });
+}
+
+function connectDb() {
+  var c = window.claude;
+  if (!c || typeof c.use !== 'function') return;
+  store.mode = 'pending';
+  store.baseUpdated = S.updated;
+  renderSyncState();
+  c.use('db').then(function (db) {
+    if (!db) { store.mode = 'local'; renderAll(); return; }
+    store.mode = 'db';
+    try { store.ref = db.doc('progress/main'); } catch (e) { store.mode = 'local'; renderAll(); return; }
+    store.ref.onSnapshot(function (snap) {
+      if (snap.metadata && snap.metadata.hasPendingWrites) return;
+      var data = snap.exists ? snap.data() : null;
+      if (!store.ready) {
+        store.ready = true;
+        var edits = store.edits; store.edits = {};
+        var hasEdits = Object.keys(edits).length > 0;
+        if (validState(data)) {
+          if (!hasEdits && store.baseUpdated > data.updated) {
+            flush(); // this device holds newer progress than the account copy
+          } else {
+            var merged = cleanMap(data.s);
+            Object.keys(edits).forEach(function (k) { if (edits[k]) merged[k] = edits[k]; else delete merged[k]; });
+            S = { v: 2, updated: hasEdits ? Date.now() : data.updated, s: merged };
+            if (hasEdits) flush();
+          }
+        } else if (hasEdits || S.updated > SEED.updated) {
+          flush();
+        }
+        lsSet(LS_KEY, JSON.stringify(S));
+        renderAll();
+        return;
+      }
+      if (validState(data) && !store.writing && !store.dirty && data.updated !== S.updated) {
+        S = { v: 2, updated: data.updated, s: cleanMap(data.s) };
+        lsSet(LS_KEY, JSON.stringify(S));
+        renderAll();
+      }
+    }, function () { store.mode = 'local'; store.ready = false; renderAll(); });
+  }, function () { store.mode = 'local'; renderAll(); });
+}
+
+/* ---- Progress codes: 3 statuses per character, base 27 ---- */
+var ALPH = '0123456789abcdefghijklmnopq';
+function encode(map) {
+  var digits = ORDER.map(function (id) { return map[id] === 'd' ? 2 : map[id] === 'l' ? 1 : 0; });
+  while (digits.length % 3) digits.push(0);
+  var out = '';
+  for (var i = 0; i < digits.length; i += 3) out += ALPH[digits[i] * 9 + digits[i + 1] * 3 + digits[i + 2]];
+  return 'hh2-' + out;
+}
+function decode(text) {
+  var m = /hh2-([0-9a-q]+)/i.exec(String(text || ''));
+  if (!m) return null;
+  var chars = m[1].toLowerCase(), map = {};
+  for (var i = 0; i < chars.length; i++) {
+    var n = ALPH.indexOf(chars[i]);
+    if (n < 0) return null;
+    var ds = [Math.floor(n / 9), Math.floor(n / 3) % 3, n % 3];
+    for (var j = 0; j < 3; j++) {
+      var id = ORDER[i * 3 + j];
+      if (id && ds[j]) map[id] = ds[j] === 2 ? 'd' : 'l';
+    }
+  }
+  return map;
+}
+function countMap(map) {
+  var d = 0, l = 0;
+  Object.keys(map).forEach(function (k) { if (map[k] === 'd') d++; else if (map[k] === 'l') l++; });
+  return { d: d, l: l };
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+function onPath(b) {
+  if (UI.path === 'all') return true;
+  if (UI.path === 'essential') return b.v === 'essential';
+  return b.v === 'essential' || b.v === 'recommended';
+}
+function noCell(b) {
+  if (b.no === '+') return '<div class="tile extra" title="Not part of the numbered series"><small>Extra</small><span>+</span></div>';
+  var n = Math.min(String(b.no).length, 7);
+  return '<div class="tile n' + n + '"><small>' + (b.sot ? 'Siege' : 'No.') + '</small><span>' + esc(b.no) + '</span></div>';
+}
+function label(b) { return b.no === '+' ? b.k : (b.sot ? 'Siege ' + b.no : 'No. ' + b.no); }
+function scoreHtml(b) { return b.r == null ? '<span class="score">New &middot; unscored</span>' : '<span class="score"><b>' + b.r + '</b>/10</span>'; }
+
+function renderSummary() {
+  var path = BOOKS.filter(onPath);
+  var done = path.filter(function (b) { return isDone(b.id); }).length;
+  var pct = path.length ? Math.round(done / path.length * 100) : 0;
+  $('sum-big').innerHTML = done + '<span class="of">/ ' + path.length + '</span>';
+  $('sum-label').innerHTML = 'Finished on the <strong>' + PATH_LABEL[UI.path] + '</strong> path &middot; ' + pct + '%';
+  $('sum-bar').style.width = pct + '%';
+  var all = BOOKS.filter(function (b) { return isDone(b.id); }).length;
+  var ess = BOOKS.filter(function (b) { return b.v === 'essential'; });
+  var essDone = ess.filter(function (b) { return isDone(b.id); }).length;
+  var rgd = rgCoreDone();
+  $('sum-mini').innerHTML = '<span><b>' + all + '</b> of ' + BOOKS.length + ' overall</span>' +
+    '<span><b>' + essDone + '</b> of ' + ess.length + ' essentials</span>' +
+    '<span><b>' + rgd + '</b> of ' + CORE_RG.length + ' Raven Guard core</span>';
+
+  var now = BOOKS.filter(function (b) { return st(b.id) === 'l'; });
+  $('listen-count').textContent = now.length ? String(now.length) : '';
+  $('now-list').innerHTML = now.length ? now.map(function (b) {
+    return '<li class="qitem"><div class="qt"><div class="qtitle">' + esc(b.t) + '</div><div class="qmeta">' + esc(label(b)) + ' &middot; ' + VERDICT[b.v] + '</div></div>' +
+      '<button class="btn small primary" type="button" data-action="done" data-id="' + b.id + '">Finished</button></li>';
+  }).join('') : '<li><p class="qempty">Nothing in progress. Tap <b>Mark listening</b> on a book to pin it here.</p></li>';
+
+  $('path-name').textContent = PATH_LABEL[UI.path];
+  var next = path.filter(function (b) { return !st(b.id); }).slice(0, 3);
+  $('next-list').innerHTML = next.length ? next.map(function (b) {
+    return '<li class="qitem"><div class="qt"><div class="qtitle">' + esc(b.t) + '</div><div class="qmeta">' + esc(label(b)) + ' &middot; ' + VERDICT[b.v] + (b.r != null ? ' &middot; ' + b.r + '/10' : '') + '</div></div>' +
+      '<button class="btn small" type="button" data-action="listen" data-id="' + b.id + '">Start</button></li>';
+  }).join('') : '<li><p class="qempty">Path complete. The Emperor protects.</p></li>';
+
+  var nextEss = BOOKS.filter(function (b) { return b.v === 'essential' && !st(b.id); })[0];
+  var shown = next.some(function (b) { return nextEss && b.id === nextEss.id; });
+  $('next-ess').innerHTML = (nextEss && !shown) ? '<div class="next-ess">Next essential: <b>' + esc(nextEss.t) + '</b> &middot; ' + esc(label(nextEss)) + '</div>' : '';
+  $('rg-tab-count').textContent = rgd + '/' + CORE_RG.length;
+
+  var nextNumbered = path.filter(function (b) { return !st(b.id) && b.no !== '+'; })[0];
+  $('hero-mark').textContent = nextNumbered ? nextNumbered.no : '';
+}
+
+function matchSearch(b) {
+  if (!search) return true;
+  var hay = (b.t + ' ' + b.a + ' ' + b.b + ' ' + b.k + (b.rg ? ' raven guard corax ' + b.rg.n : '')).toLowerCase();
+  return search.split(/\s+/).every(function (w) { return hay.indexOf(w) !== -1; });
+}
+
+function rowHtml(b) {
+  var s = st(b.id);
+  var cls = 'row' + (s === 'd' ? ' is-done' : '') + (s === 'l' ? ' is-listening' : '');
+  var rg = b.rg ? '<button type="button" class="rgtag" data-action="goto-raven" title="Open the Raven Guard path">Raven Guard &middot; ' + esc(b.rg.n) + '</button>' : '';
+  return '<li class="' + cls + '" id="row-' + b.id + '">' + noCell(b) +
+    '<div class="body"><div class="tline"><span class="title">' + esc(b.t) + '</span><span class="author">' + esc(b.a) + '</span></div>' +
+    '<p class="blurb">' + esc(b.b) + '</p>' +
+    '<div class="meta"><span class="v ' + b.v + '">' + VERDICT[b.v] + '</span>' + scoreHtml(b) +
+    '<span class="kind">' + esc(b.k) + '</span>' + rg +
+    '<button type="button" class="listen-btn" data-action="listen" data-id="' + b.id + '" aria-pressed="' + (s === 'l') + '">' + (s === 'l' ? 'Listening' : 'Mark listening') + '</button></div></div>' +
+    '<button type="button" class="check" role="checkbox" aria-checked="' + (s === 'd') + '" aria-label="Finished: ' + esc(b.t) + '" data-action="done" data-id="' + b.id + '"></button></li>';
+}
+
+function renderGuide() {
+  var html = '';
+  PHASES.forEach(function (ph) {
+    var inPhase = BOOKS.filter(function (b) { return b.p === ph.id; });
+    var onP = search ? inPhase : inPhase.filter(onPath);
+    var vis = onP.filter(matchSearch).filter(function (b) { return !(UI.hideDone && isDone(b.id)); });
+    var doneN = onP.filter(function (b) { return isDone(b.id); }).length;
+    var hidden = inPhase.length - onP.length;
+    if (search && !vis.length) return;
+    var allDone = onP.length > 0 && doneN === onP.length;
+    var pct = onP.length ? Math.round(doneN / onP.length * 100) : 0;
+    var open = search ? true : (ph.id in UI.open ? UI.open[ph.id] : !allDone);
+    html += '<section class="phase' + (open ? '' : ' collapsed') + '" id="' + ph.id + '" style="--pct:' + pct + '%">' +
+      '<h2 class="phase-h"><button type="button" class="phase-head" data-action="phase" data-id="' + ph.id + '" aria-expanded="' + open + '">' +
+      '<span class="phase-text"><span class="phase-num">' + ph.num + '</span><span class="ph-title">' + esc(ph.title) + '</span><span class="ph-sub">' + esc(ph.sub) + '</span></span>' +
+      '<span class="phase-count' + (allDone ? ' done' : '') + '">' + doneN + ' / ' + onP.length + (allDone ? ' &#10003;' : '') + '</span>' +
+      '<span class="chev" aria-hidden="true"></span></button></h2>' +
+      '<ol class="rows">' + vis.map(rowHtml).join('') + '</ol>' +
+      ((open && !search && (hidden || (UI.hideDone && doneN))) ? '<p class="phase-note">' +
+        [hidden ? hidden + ' more on the Everything path' : '', (UI.hideDone && doneN) ? doneN + ' finished hidden' : ''].filter(Boolean).join(' &middot; ') + '</p>' : '') +
+      '</section>';
+  });
+  $('guide').innerHTML = html || '<p class="qempty" style="margin-top:24px">No books match “' + esc(search) + '”.</p>';
+  Array.prototype.forEach.call(document.querySelectorAll('[data-action="path"]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-path') === UI.path)); });
+  $('hide-done').checked = UI.hideDone;
+}
+
+function rgCoreDone() {
+  var n = 0;
+  RG_ACTS.forEach(function (act) { act.items.forEach(function (it) { var key = it.ref || it.id; if (CORE_RG.indexOf(key) !== -1 && rgDone(it)) n++; }); });
+  return n;
+}
+
+function nodeHtml(it) {
+  var b = it.ref ? byId[it.ref] : null;
+  var title = b ? b.t : it.t, author = b ? b.a : it.a, kind = b ? b.k : it.k;
+  var done = rgDone(it);
+  var where, status, control;
+  if (b) {
+    where = 'In the guide: ' + esc(label(b)) + ' <button type="button" class="linkish" data-action="goto-book" data-id="' + b.id + '">Show</button>';
+    var s = st(b.id);
+    status = s === 'd' ? 'Finished' : s === 'l' ? 'Listening' : 'Not yet';
+    control = '<button type="button" class="check" role="checkbox" aria-checked="' + (s === 'd') + '" aria-label="Finished: ' + esc(title) + '" data-action="done" data-id="' + b.id + '"></button>';
   } else {
-    fallbackExport(text);
+    where = esc(it.where);
+    var viaParent = it.in && isDone(it.in) && !isDone(it.id);
+    var parent = it.in ? byId[it.in] : null;
+    status = isDone(it.id) ? 'Finished' : viaParent ? 'Finished with ' + esc(parent.t) : (it.in && st(it.in) === 'l') ? 'In progress (inside ' + esc(parent.t) + ')' : 'Not yet';
+    control = viaParent
+      ? '<button type="button" class="check" role="checkbox" aria-checked="true" disabled title="Counted as finished with ' + esc(parent.t) + '" aria-label="Finished with ' + esc(parent.t) + '"></button>'
+      : '<button type="button" class="check" role="checkbox" aria-checked="' + isDone(it.id) + '" aria-label="Finished: ' + esc(title) + '" data-action="done" data-id="' + it.id + '"></button>';
   }
-});
-
-function fallbackExport(text) {
-  const w = window.open('', '_blank');
-  if (w && w.document) {
-    w.document.write('<pre>' + text.replace(/</g, '&lt;') + '</pre>');
-  } else {
-    alert(text);
-  }
+  return '<li class="node' + (done ? ' done' : '') + '"><span class="dot" aria-hidden="true"></span>' +
+    '<div class="body"><div class="tline"><span class="ntitle">' + esc(title) + '</span><span class="role ' + it.role + '">' + ROLE[it.role] + '</span></div>' +
+    '<div class="nby">' + esc(author) + ' &middot; ' + esc(kind) + '</div>' +
+    '<p class="ntext">' + esc(it.x) + '</p>' +
+    '<dl><dt>Where</dt><dd>' + where + '</dd>' + (it.when ? '<dt>When</dt><dd>' + esc(it.when) + '</dd>' : '') + '<dt>Status</dt><dd><span class="st">' + status + '</span></dd></dl></div>' +
+    control + '</li>';
 }
 
-renderAll();
+function renderRaven() {
+  var done = rgCoreDone(), pct = Math.round(done / CORE_RG.length * 100);
+  var nextCore = null;
+  RG_ACTS.forEach(function (act) { act.items.forEach(function (it) { var key = it.ref || it.id; if (!nextCore && CORE_RG.indexOf(key) !== -1 && !rgDone(it)) nextCore = it; }); });
+  var nextTitle = nextCore ? (nextCore.ref ? byId[nextCore.ref].t : nextCore.t) : null;
+  var html = '<p class="lede">Corax’s war runs alongside the main saga, almost entirely in <strong>Gav Thorpe’s</strong> books. Here is every piece with real Raven Guard content, in story order, with where to find it and when it fits.</p>' +
+    '<div class="facts">' +
+      '<div class="fact"><h3>Start</h3><p><b>Raven’s Flight</b>: Corax’s escape from Isstvaan V. It’s inside Shadows of Treachery.</p></div>' +
+      '<div class="fact"><h3>Core</h3><p><b>Deliverance Lost</b>, then the <b>Corax</b> collection from Soulforge to Weregeld.</p></div>' +
+      '<div class="fact"><h3>The Siege</h3><p><b>Corax is not at the Siege of Terra.</b> His Heresy story ends in Weregeld; the Raven Guard barely feature on Terra.</p></div>' +
+    '</div>' +
+    '<div class="rg-progress"><span><b>' + done + '</b> of ' + CORE_RG.length + ' core pieces finished</span><div class="bar" aria-hidden="true"><span style="width:' + pct + '%"></span></div></div>' +
+    (nextTitle ? '<div class="callout">Next for the Raven Guard: <b>' + esc(nextTitle) + '</b>. ' + esc(nextCore.where || ('Guide ' + label(byId[nextCore.ref]))) + '.</div>' : '<div class="callout">You’ve finished the whole Raven Guard core. Nevermore.</div>');
+  RG_ACTS.forEach(function (act) {
+    html += '<section class="act"><div class="act-head"><span class="act-num">' + esc(act.num) + '</span><h2>' + esc(act.title) + '</h2><p>' + esc(act.sub) + '</p></div>' +
+      '<ol class="tl">' + act.items.map(nodeHtml).join('') + '</ol></section>';
+  });
+  $('raven').innerHTML = html;
+}
+
+function renderSyncState() {
+  var short, on = false, link = '';
+  if (store.mode === 'db' && store.readOnly) short = 'View only';
+  else if (store.mode === 'db' && store.ready) { short = 'Synced to your Claude account'; on = true; }
+  else if (store.mode === 'db' || store.mode === 'pending') short = 'Connecting';
+  else {
+    short = 'Saved in this browser';
+    if (isHosted() && SYNCED_URL) link = '<a href="' + SYNCED_URL + '" target="_blank" rel="noopener">Open synced copy</a>';
+  }
+  var chip = $('strip-sync');
+  if (chip) {
+    chip.className = 'sync-chip' + (on ? ' on' : '') + (link ? ' has-link' : '');
+    chip.innerHTML = '<span class="dot"></span><span class="sync-text">' + short + '</span>' + link;
+  }
+  var el = $('save-state');
+  if (!el) return;
+  if (store.mode === 'db' && store.readOnly) { el.className = 'save-state'; el.textContent = 'View only. You can’t change this copy.'; }
+  else if (store.mode === 'db' && store.ready) { el.className = 'save-state synced'; el.textContent = 'Saved to your Claude account. Syncs on every device.'; }
+  else if (store.mode === 'db' || store.mode === 'pending') { el.className = 'save-state'; el.textContent = 'Connecting to your saved progress…'; }
+  else { el.className = 'save-state'; el.textContent = 'Saved in this browser on this device.'; }
+}
+
+function renderSync() {
+  var keep = $('code-in') ? $('code-in').value : '';
+  var code = encode(S.s);
+  var c = countMap(S.s);
+  var hosted = isHosted();
+  var link = hosted ? (location.href.split('#')[0] + '#p=' + code) : '';
+  var html = '<div class="panel"><h2>Where your progress lives</h2><p><span class="save-state" id="save-state"></span></p>' +
+    (hosted ? '<p>For progress that follows you to every device, use the <a href="' + SYNCED_URL + '" target="_blank" rel="noopener">synced copy on your Claude account</a>. To move the ticks from this browser there, copy your progress link below and paste it into its Load progress box.</p>' +
+      '<p>Browsers can clear saved site data, and each device keeps its own copy. Keep your progress link somewhere safe (Notes, an email to yourself). Opening it on any device loads your progress.</p>' +
+      '<p class="note">iPhone: Safari can wipe data for sites you haven’t opened in 7 days. Adding this page to your Home Screen avoids that.</p>'
+      : '<p>Every tick is saved to this page on your Claude account, so it’s the same on your phone and PC. The code below is a backup you can paste into any copy of this tracker.</p>') +
+    '</div>' +
+    '<div class="panel"><h2>Progress ' + (hosted ? 'link' : 'code') + '</h2><p>' + c.d + ' finished and ' + c.l + ' in progress.</p>' +
+    '<div class="codebox"><input id="code-out" readonly value="' + esc(hosted ? link : code) + '" aria-label="Progress code"><button class="btn primary" type="button" data-action="copy">Copy</button></div>' +
+    '<div class="msg" id="copy-msg" aria-live="polite"></div></div>' +
+    '<div class="panel"><h2>Load progress</h2><p>Paste a progress link or code from another device.</p>' +
+    '<div class="codebox"><input id="code-in" placeholder="hh2-… or a full link" aria-label="Paste a progress code"><button class="btn" type="button" data-action="import">Load</button></div>' +
+    '<div id="import-zone">' + importConfirmHtml() + '</div><div class="msg" id="import-msg" aria-live="polite"></div></div>' +
+    '<div class="panel"><h2>Start over</h2><p>Reset to the Audible library snapshot from your screenshot, or clear every tick.</p>' +
+    '<div class="codebox"><button class="btn" type="button" data-action="ask-reset" data-kind="seed">Reset to library snapshot</button><button class="btn danger" type="button" data-action="ask-reset" data-kind="clear">Clear everything</button></div>' +
+    (confirmReset ? '<div class="confirm"><p>' + (confirmReset === 'seed' ? 'Replace your progress with the library snapshot?' : 'Clear all progress? This can’t be undone unless you saved a code.') + '</p><div class="btns"><button class="btn primary" type="button" data-action="do-reset">Yes, ' + (confirmReset === 'seed' ? 'reset' : 'clear') + '</button><button class="btn" type="button" data-action="cancel-reset">Cancel</button></div></div>' : '') +
+    '</div>';
+  $('sync').innerHTML = html;
+  if (keep) $('code-in').value = keep;
+  renderSyncState();
+}
+function importConfirmHtml() {
+  if (!pendingImport) return '';
+  var c = countMap(pendingImport);
+  return '<div class="confirm"><p>This code has <b>' + c.d + '</b> finished and <b>' + c.l + '</b> in progress. Replace what’s here?</p>' +
+    '<div class="btns"><button class="btn primary" type="button" data-action="confirm-import">Replace my progress</button><button class="btn" type="button" data-action="cancel-import">Cancel</button></div></div>';
+}
+
+function renderBanner() {
+  var el = $('import-banner');
+  var h = location.hash || '';
+  var m = /#p=(hh2-[0-9a-q]+)/i.exec(h);
+  if (!m) { el.hidden = true; el.innerHTML = ''; return; }
+  var map = decode(m[1]);
+  if (!map) { el.hidden = true; return; }
+  pendingImport = map;
+  var c = countMap(map);
+  el.className = 'banner';
+  el.hidden = false;
+  el.innerHTML = '<p>This link carries saved progress: <b>' + c.d + '</b> finished, <b>' + c.l + '</b> in progress. Load it on this device?</p>' +
+    '<button class="btn primary" type="button" data-action="confirm-import">Load progress</button><button class="btn" type="button" data-action="cancel-import">Ignore</button>';
+}
+function clearHash() { try { history.replaceState(null, '', location.pathname + location.search + '#' + currentTab); } catch (e) {} }
+
+function renderAll() { renderSummary(); renderGuide(); renderRaven(); renderSync(); }
+
+/* =====================================================================
+   TABS + THEME
+   ===================================================================== */
+var currentTab = 'guide';
+function showTab(name, focus) {
+  if (['guide', 'raven', 'sync'].indexOf(name) === -1) name = 'guide';
+  currentTab = name;
+  ['guide', 'raven', 'sync'].forEach(function (t) {
+    $('view-' + t).hidden = t !== name;
+    $('tab-' + t).setAttribute('aria-selected', String(t === name));
+    $('tab-' + t).tabIndex = t === name ? 0 : -1;
+  });
+  if (focus) $('tab-' + name).focus();
+}
+function themeNow() {
+  var t = document.documentElement.getAttribute('data-theme');
+  if (t === 'dark' || t === 'light') return t;
+  return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+}
+function paintThemeBtn() {
+  var dark = themeNow() === 'dark';
+  $('theme-btn').innerHTML = (dark ? ICON_SUN : ICON_MOON) + '<span class="tlabel">' + (dark ? 'Light' : 'Dark') + '</span>';
+  $('theme-btn').setAttribute('aria-label', 'Switch to ' + (dark ? 'light' : 'dark') + ' theme');
+}
+(function initTheme() {
+  var saved = lsGet(LS_THEME);
+  if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+  paintThemeBtn();
+  if (window.matchMedia) { var mq = window.matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', paintThemeBtn); }
+})();
+
+/* =====================================================================
+   EVENTS
+   ===================================================================== */
+document.addEventListener('click', function (e) {
+  var tabBtn = e.target.closest('[data-tab]');
+  if (tabBtn) { showTab(tabBtn.getAttribute('data-tab')); clearHash(); return; }
+  var el = e.target.closest('[data-action]');
+  if (!el || el.disabled) return;
+  var a = el.getAttribute('data-action'), id = el.getAttribute('data-id');
+  if (a === 'done') { setStatus(id, isDone(id) ? null : 'd'); }
+  else if (a === 'listen') { setStatus(id, st(id) === 'l' ? null : 'l'); }
+  else if (a === 'path') { UI.path = el.getAttribute('data-path'); saveUI(); renderSummary(); renderGuide(); }
+  else if (a === 'phase') {
+    var sec = $(id); var open = sec.classList.contains('collapsed');
+    UI.open[id] = open; saveUI(); renderGuide();
+  }
+  else if (a === 'goto-raven') { showTab('raven'); clearHash(); window.scrollTo(0, $('hh-app').querySelector('.tabs').offsetTop - 4); }
+  else if (a === 'goto-book') {
+    var b = byId[id]; if (!b) return;
+    showTab('guide'); clearHash();
+    if (search) { search = ''; $('search').value = ''; }
+    if (!onPath(b)) { UI.path = 'all'; saveUI(); }
+    UI.open[b.p] = true; saveUI(); renderSummary(); renderGuide();
+    var row = $('row-' + id); if (row) { row.scrollIntoView({ block: 'center' }); row.style.outline = '2px solid var(--accent)'; setTimeout(function () { row.style.outline = ''; }, 1600); }
+  }
+  else if (a === 'theme') {
+    var next = themeNow() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next); lsSet(LS_THEME, next); paintThemeBtn();
+  }
+  else if (a === 'copy') {
+    var inp = $('code-out'), msg = $('copy-msg');
+    var done = function () { msg.className = 'msg ok'; msg.textContent = 'Copied.'; };
+    var fail = function () { inp.focus(); inp.select(); msg.className = 'msg'; msg.textContent = 'Selected. Press Ctrl+C (or long-press and Copy).'; };
+    try { navigator.clipboard.writeText(inp.value).then(done, fail); } catch (err) { fail(); }
+  }
+  else if (a === 'import') {
+    var map = decode($('code-in').value);
+    var im = $('import-msg');
+    if (!map) { im.className = 'msg err'; im.textContent = 'That isn’t a progress code. Codes start with hh2-.'; pendingImport = null; $('import-zone').innerHTML = ''; return; }
+    pendingImport = map; im.textContent = ''; $('import-zone').innerHTML = importConfirmHtml();
+  }
+  else if (a === 'confirm-import') {
+    if (pendingImport) { replaceAll(pendingImport); pendingImport = null; }
+    $('import-banner').hidden = true; clearHash(); renderSync();
+    var m2 = $('import-msg'); if (m2) { m2.className = 'msg ok'; m2.textContent = 'Progress loaded.'; }
+  }
+  else if (a === 'cancel-import') { pendingImport = null; $('import-banner').hidden = true; clearHash(); renderSync(); }
+  else if (a === 'ask-reset') { confirmReset = el.getAttribute('data-kind'); renderSync(); }
+  else if (a === 'cancel-reset') { confirmReset = null; renderSync(); }
+  else if (a === 'do-reset') { var k = confirmReset; confirmReset = null; replaceAll(k === 'seed' ? clone(SEED.s) : {}); }
+});
+document.addEventListener('keydown', function (e) {
+  var t = e.target.closest && e.target.closest('[role="tab"]');
+  if (!t || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+  var order = ['guide', 'raven', 'sync'], i = order.indexOf(currentTab);
+  showTab(order[(i + (e.key === 'ArrowRight' ? 1 : 2)) % 3], true); clearHash(); e.preventDefault();
+});
+$('hide-done').addEventListener('change', function (e) { UI.hideDone = e.target.checked; saveUI(); renderGuide(); });
+var searchTimer = null;
+$('search').addEventListener('input', function (e) {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function () { search = e.target.value.trim().toLowerCase(); renderGuide(); }, 120);
+});
+window.addEventListener('hashchange', function () {
+  var h = (location.hash || '').replace('#', '');
+  if (/^p=/.test(h)) { renderBanner(); return; }
+  if (h) showTab(h);
+});
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+(function boot() {
+  var h = (location.hash || '').replace('#', '');
+  showTab(/^(guide|raven|sync)$/.test(h) ? h : 'guide');
+  renderAll();
+  renderBanner();
+  if (navigator.storage && navigator.storage.persist && isHosted()) { try { navigator.storage.persist(); } catch (e) {} }
+  connectDb();
+})();
+
+/* Test hook (harmless in production). */
+window.__hh = { encode: encode, decode: decode, state: function () { return S; }, BOOKS: BOOKS, ORDER: ORDER, RG_ACTS: RG_ACTS, store: store };
+})();
 </script>
 </body>
 </html>
