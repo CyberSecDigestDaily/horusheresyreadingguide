@@ -943,15 +943,18 @@ function replaceAll(map) {
 }
 
 /* ---- Network ---- */
-function relaySend(c) {
-  return fetch(RELAY, { method: 'POST', body: JSON.stringify({ hh: 3, dev: sync.dev, c: c }), keepalive: true })
-    .then(function (r) { if (!r.ok) throw new Error('relay ' + r.status); });
+/* keepalive only when the page is closing, so the send outlives it; plain fetch otherwise. */
+function relaySend(c, closing) {
+  var init = { method: 'POST', body: JSON.stringify({ hh: 3, dev: sync.dev, c: c }) };
+  if (closing) init.keepalive = true;
+  return fetch(RELAY, init).then(function (r) { if (!r.ok) throw new Error('relay ' + r.status); });
 }
 function scheduleFlush(ms) {
   clearTimeout(sync.timer);
   sync.timer = setTimeout(flushOut, ms == null ? 600 : ms);
 }
-function flushOut() {
+function flushOut(closing) {
+  closing = closing === true;
   clearTimeout(sync.timer); sync.timer = null;
   if (sync.flushing) { sync.again = true; return; }
   Object.keys(sync.out).forEach(function (id) { if (sync.m[id] && newer(sync.m[id], sync.out[id])) delete sync.out[id]; });
@@ -964,7 +967,7 @@ function flushOut() {
     (function (chunk) {
       var c = {};
       chunk.forEach(function (id) { c[id] = sync.out[id]; });
-      jobs.push(relaySend(c).then(function () {
+      jobs.push(relaySend(c, closing).then(function () {
         chunk.forEach(function (id) { var v = sync.out[id]; if (v && v[0] === c[id][0] && v[1] === c[id][1]) delete sync.out[id]; });
       }));
     })(ids.slice(i, i + 40));
@@ -1047,9 +1050,9 @@ function startSync() {
   }, POLL_MS);
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'visible') refresh(Date.now() - sync.progressAt > 2 * 6e4);
-    else if (pendingCount()) flushOut();
+    else if (pendingCount()) flushOut(true);
   });
-  window.addEventListener('pagehide', function () { if (pendingCount()) flushOut(); });
+  window.addEventListener('pagehide', function () { if (pendingCount()) flushOut(true); });
   window.addEventListener('online', function () { refresh(true); });
 }
 
