@@ -827,6 +827,9 @@ var PROGRESS_URLS = ['https://raw.githubusercontent.com/CyberSecDigestDaily/horu
 var POLL_MS = 30000;
 var KNOWN = {};
 ORDER.forEach(function (id) { KNOWN[id] = true; });
+/* Stamps known to be wrong (test ticks from 22 Nov 2026), ignored wherever they turn up: [book, from, to]. */
+var VOID = [['pythos', 1795342700000, 1795342900000]];
+function voided(id, ts) { return VOID.some(function (v) { return v[0] === id && ts >= v[1] && ts <= v[2]; }); }
 
 var sync = {
   m: {},          // book id -> [status, stamp]; status 'd' finished, 'l' listening, '' cleared
@@ -839,7 +842,7 @@ var sync = {
 function rank(s) { return s === 'd' ? 2 : s === 'l' ? 1 : 0; }
 function validEntry(id, v, now) {
   return KNOWN[id] === true && Array.isArray(v) && (v[0] === 'd' || v[0] === 'l' || v[0] === '') &&
-    typeof v[1] === 'number' && isFinite(v[1]) && v[1] > 1.6e12 && v[1] < now + 2 * 864e5;
+    typeof v[1] === 'number' && isFinite(v[1]) && v[1] > 1.6e12 && v[1] < now + 2 * 864e5 && !voided(id, v[1]);
 }
 function newer(a, b) { return !b || a[1] > b[1] || (a[1] === b[1] && rank(a[0]) > rank(b[0])); }
 function mergeInto(target, src) {

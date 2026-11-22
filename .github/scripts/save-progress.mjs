@@ -11,18 +11,22 @@ const orderSrc = (/var ORDER = \[([^\]]*)\]/.exec(html) || [])[1];
 if (!topic || !orderSrc) throw new Error('Could not read RELAY_TOPIC or ORDER from index.html');
 const ORDER = orderSrc.split(',').map((s) => s.trim().replace(/^'|'$/g, '')).filter(Boolean);
 const known = new Set(ORDER);
+const voidSrc = (/var VOID = (\[[^;]*\]);/.exec(html) || [])[1];
+const VOID = voidSrc ? JSON.parse(voidSrc.replace(/'/g, '"')) : [];
+const voided = (id, ts) => VOID.some(([b, from, to]) => b === id && ts >= from && ts <= to);
 
 const file = process.env.PROGRESS_FILE || 'progress.json';
 const prev = JSON.parse(readFileSync(file, 'utf8'));
 if (prev.v !== 3 || !prev.items) throw new Error(`${file} is not a v3 progress file`);
-const items = {};
-for (const [id, v] of Object.entries(prev.items)) if (known.has(id)) items[id] = v;
-
 const now = Date.now();
 const rank = (s) => (s === 'd' ? 2 : s === 'l' ? 1 : 0);
 const valid = (id, v) => known.has(id) && Array.isArray(v) && ['d', 'l', ''].includes(v[0]) &&
-  Number.isFinite(v[1]) && v[1] > 1.6e12 && v[1] < now + 2 * 864e5;
+  Number.isFinite(v[1]) && v[1] > 1.6e12 && v[1] < now + 2 * 864e5 && !voided(id, v[1]);
 const newer = (a, b) => !b || a[1] > b[1] || (a[1] === b[1] && rank(a[0]) > rank(b[0]));
+
+const items = {};
+let dropped = 0;
+for (const [id, v] of Object.entries(prev.items)) { if (valid(id, v)) items[id] = v; else dropped++; }
 
 async function readRelay() {
   for (let attempt = 1; ; attempt++) {
@@ -57,8 +61,8 @@ let lastCommit = now;
 try { lastCommit = Number(execSync('git log -1 --format=%ct').toString().trim()) * 1000 || now; } catch {}
 const heartbeat = now - lastCommit > 45 * 864e5;
 
-console.log(`${messages} relay message(s), ${changes} change(s)${heartbeat ? ', heartbeat due' : ''}`);
-if (!changes && !heartbeat) process.exit(0);
+console.log(`${messages} relay message(s), ${changes} change(s), ${dropped} dropped${heartbeat ? ', heartbeat due' : ''}`);
+if (!changes && !dropped && !heartbeat) process.exit(0);
 
 const lines = ORDER.filter((id) => items[id]).map((id) => `    ${JSON.stringify(id)}: ${JSON.stringify(items[id])}`);
 writeFileSync(file, `{\n  "v": 3,\n  "saved": ${JSON.stringify(new Date(now).toISOString())},\n  "items": {\n${lines.join(',\n')}\n  }\n}\n`);
