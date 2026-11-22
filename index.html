@@ -2,6 +2,7 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'self' https://ntfy.sh https://raw.githubusercontent.com; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="The Horus Heresy and the Siege of Terra in reading order, with a verdict and score for every book, progress tracking and a Raven Guard path.">
 <meta name="theme-color" content="#0b0b0b">
@@ -148,6 +149,7 @@ button, input { font: inherit; color: inherit; }
 .sync-chip { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
 .sync-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mast-ink-2); flex: none; }
 .sync-chip.on .dot { background: var(--ok); }
+.sync-chip.off .dot { background: var(--accent); }
 .sync-chip a { color: var(--mast-ink); text-decoration: underline; text-underline-offset: 3px; }
 .theme-btn { display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 10px; background: transparent; border: 1px solid var(--mast-rule); color: var(--mast-ink); cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }
 .theme-btn svg { width: 14px; height: 14px; flex: none; }
@@ -349,6 +351,7 @@ button, input { font: inherit; color: inherit; }
 .save-state { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; color: var(--ink); }
 .save-state::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--ink-3); flex: none; }
 .save-state.synced::before { background: var(--ok); }
+.save-state.off::before { background: var(--accent); }
 .codebox { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .codebox input { flex: 1 1 260px; min-width: 0; height: 40px; padding: 0 12px; font-family: var(--font-mono); font-size: 13.5px; color: var(--ink); background: var(--sunk); border: 1px solid var(--rule); border-radius: 0; }
 .msg { min-height: 1.4em; margin-top: 10px; font-size: 14.5px; color: var(--ink-2); }
@@ -718,9 +721,6 @@ var SEED = { v: 2, updated: Date.UTC(2026, 6, 20), s: {
   'shadows':'l','nemesis':'l','old-earth':'l','buried-dagger':'l','solar-war':'l'
 } };
 
-/* The copy of this tracker that syncs through a Claude account. */
-var SYNCED_URL = 'https://claude.ai/artifact/1m7hEUWST2W3NvZszEabVX';
-
 /* Titles used by earlier versions of this page, for migrating old saves. */
 var LEGACY_TITLES = {};
 BOOKS.forEach(function (b) { LEGACY_TITLES[b.t] = b.id; });
@@ -755,13 +755,13 @@ function cleanMap(m) {
   Object.keys(m || {}).forEach(function (k) { if (ORDER.indexOf(k) !== -1 && (m[k] === 'd' || m[k] === 'l')) out[k] = m[k]; });
   return out;
 }
-function isHosted() { return !(window.claude && typeof window.claude.use === 'function'); }
 
 /* =====================================================================
    STATE
    ===================================================================== */
 var LS_KEY = 'hh-progress-v2';
 var LS_OLD = 'hh-reading-log-v1';
+var LS_SYNC = 'hh-sync-v3';
 var LS_UI = 'hh-ui-v2';
 var LS_THEME = 'hh-theme';
 
@@ -794,7 +794,7 @@ function loadInitial() {
   return best;
 }
 
-var S = loadInitial();
+var S = { v: 3, updated: SEED.updated, s: clone(SEED.s) }; // filled in by initSync() at boot
 var UI = (function () {
   var d = { path: 'recommended', hideDone: false, open: {} };
   try { var u = JSON.parse(lsGet(LS_UI) || 'null'); if (u && typeof u === 'object') { d.path = PATH_LABEL[u.path] ? u.path : d.path; d.hideDone = !!u.hideDone; d.open = u.open || {}; } } catch (e) {}
@@ -812,90 +812,242 @@ function rgDone(item) {
   return isDone(item.id) || (item.in ? isDone(item.in) : false);
 }
 
-/* ---- Sync backend: Claude account (db) when available, else this browser ---- */
-var store = { mode: 'local', ref: null, ready: false, writing: false, queued: false, readOnly: false, edits: {} };
+/* =====================================================================
+   SYNC
+   Every tick carries the time it was made, and the newest tick for a
+   book wins. Ticks travel through a relay (ntfy.sh), so other devices
+   pick them up within seconds, and a GitHub Action in this repo saves
+   them into progress.json every 15 minutes. On load the page merges
+   progress.json, the relay's last 12 hours and anything this device
+   hasn't sent yet. Nothing to sign in to, nothing to set up.
+   ===================================================================== */
+var RELAY_TOPIC = 'hhsync-pUWxIpvEgOK4yho3HkziT67y';
+var RELAY = 'https://ntfy.sh/' + RELAY_TOPIC;
+var PROGRESS_URLS = ['https://raw.githubusercontent.com/CyberSecDigestDaily/horusheresyreadingguide/main/progress.json', 'progress.json'];
+var POLL_MS = 30000;
+var KNOWN = {};
+ORDER.forEach(function (id) { KNOWN[id] = true; });
 
-function setStatus(id, value) {
-  if (store.readOnly) return;
-  if (value) S.s[id] = value; else delete S.s[id];
-  S.updated = Date.now();
-  if (!store.ready) store.edits[id] = value || null;
-  lsSet(LS_KEY, JSON.stringify(S));
-  pushRemote();
-  renderAll();
+var sync = {
+  m: {},          // book id -> [status, stamp]; status 'd' finished, 'l' listening, '' cleared
+  out: {},        // changes the relay hasn't accepted yet
+  dev: '', lastTime: 0, repubAt: 0, legacyAt: 0, carried: 0,
+  base: null, progressAt: 0,
+  loading: true, netOk: null, flushing: false, again: false, retry: 0, timer: null, polling: false
+};
+
+function rank(s) { return s === 'd' ? 2 : s === 'l' ? 1 : 0; }
+function validEntry(id, v, now) {
+  return KNOWN[id] === true && Array.isArray(v) && (v[0] === 'd' || v[0] === 'l' || v[0] === '') &&
+    typeof v[1] === 'number' && isFinite(v[1]) && v[1] > 1.6e12 && v[1] < now + 2 * 864e5;
 }
+function newer(a, b) { return !b || a[1] > b[1] || (a[1] === b[1] && rank(a[0]) > rank(b[0])); }
+function mergeInto(target, src) {
+  var n = 0, now = Date.now();
+  if (!src || typeof src !== 'object') return 0;
+  Object.keys(src).forEach(function (id) {
+    var v = src[id];
+    if (validEntry(id, v, now) && newer(v, target[id])) { target[id] = [v[0], v[1]]; n++; }
+  });
+  return n;
+}
+function seedEntries() {
+  var e = {};
+  Object.keys(SEED.s).forEach(function (id) { e[id] = [SEED.s[id], SEED.updated]; });
+  return e;
+}
+/* Books whose status differs from the library snapshot, stamped with when that save was made. */
+function diffFromSeed(map, ts) {
+  var out = {};
+  if (!(ts > SEED.updated)) return out;
+  ORDER.forEach(function (id) {
+    var a = (map[id] === 'd' || map[id] === 'l') ? map[id] : '', b = SEED.s[id] || '';
+    if (a !== b) out[id] = [a, ts];
+  });
+  return out;
+}
+function carry(entries) {
+  var n = 0;
+  Object.keys(entries).forEach(function (id) {
+    var v = entries[id];
+    if (newer(v, sync.m[id])) { sync.m[id] = v; sync.out[id] = v; n++; }
+  });
+  return n;
+}
+function randomId(n) {
+  var a = 'abcdefghijklmnopqrstuvwxyz0123456789', s = '';
+  for (var i = 0; i < n; i++) s += a[Math.floor(Math.random() * a.length)];
+  return s;
+}
+function pendingCount() { return Object.keys(sync.out).length; }
+function deriveS() {
+  var s = {}, up = SEED.updated;
+  Object.keys(sync.m).forEach(function (id) { var v = sync.m[id]; if (v[0]) s[id] = v[0]; if (v[1] > up) up = v[1]; });
+  S = { v: 3, updated: up, s: s };
+}
+function saveSync() {
+  lsSet(LS_SYNC, JSON.stringify({ v: 3, m: sync.m, out: sync.out, dev: sync.dev, lastTime: sync.lastTime, repubAt: sync.repubAt, legacyAt: sync.legacyAt }));
+}
+
+function initSync() {
+  var saved = null;
+  try { saved = JSON.parse(lsGet(LS_SYNC) || 'null'); } catch (e) { saved = null; }
+  if (saved && saved.v === 3 && saved.m && typeof saved.m === 'object') {
+    mergeInto(sync.m, saved.m);
+    mergeInto(sync.out, saved.out);
+    sync.dev = typeof saved.dev === 'string' ? saved.dev : '';
+    sync.lastTime = +saved.lastTime || 0;
+    sync.repubAt = +saved.repubAt || 0;
+    sync.legacyAt = +saved.legacyAt || 0;
+  } else {
+    sync.m = seedEntries();
+  }
+  // Carry over ticks this browser saved before sync existed (or since, from an old cached copy).
+  var legacy = loadInitial();
+  if (legacy.updated > sync.legacyAt) {
+    sync.carried += carry(diffFromSeed(legacy.s, Math.min(legacy.updated, Date.now())));
+    sync.legacyAt = legacy.updated;
+  }
+  // Hand-off from the retired Claude copy: #merge=hh2-…~<when it was saved, base 36>
+  var h = /#merge=(hh2-[0-9a-q]+)~([0-9a-z]+)/i.exec(location.hash || '');
+  if (h) {
+    var map = decode(h[1]), when = parseInt(h[2], 36);
+    if (map && when > 0) sync.carried += carry(diffFromSeed(map, Math.min(when, Date.now())));
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  }
+  mergeInto(sync.m, sync.out);
+  if (!sync.dev) sync.dev = randomId(6);
+  deriveS();
+  saveSync();
+}
+
+/* ---- Edits ---- */
+function stamp(id, status, force) {
+  var cur = sync.m[id];
+  if (!force && (cur ? cur[0] === status : !status)) return false;
+  var ts = Date.now();
+  if (cur && ts <= cur[1]) ts = cur[1] + 1;   // a fresh tick always beats what's showing
+  sync.m[id] = sync.out[id] = [status, ts];
+  return true;
+}
+function afterEdit() { deriveS(); saveSync(); renderAll(); scheduleFlush(); }
+function setStatus(id, value) { if (stamp(id, value || '')) afterEdit(); }
+/* Restamps every book, so the replacement also wins over ticks this device hasn't seen yet. */
 function replaceAll(map) {
-  if (store.readOnly) return;
-  S = { v: 2, updated: Date.now(), s: cleanMap(map) };
-  if (!store.ready) { store.edits = {}; ORDER.forEach(function (k) { store.edits[k] = S.s[k] || null; }); }
-  lsSet(LS_KEY, JSON.stringify(S));
-  pushRemote();
-  renderAll();
+  var clean = cleanMap(map);
+  ORDER.forEach(function (id) { stamp(id, clean[id] || '', true); });
+  afterEdit();
 }
 
-var pushTimer = null;
-function pushRemote() {
-  if (store.mode !== 'db' || !store.ready) return;
-  store.dirty = true;
-  clearTimeout(pushTimer);
-  pushTimer = setTimeout(flush, 500);
+/* ---- Network ---- */
+function relaySend(c) {
+  return fetch(RELAY, { method: 'POST', body: JSON.stringify({ hh: 3, dev: sync.dev, c: c }), keepalive: true })
+    .then(function (r) { if (!r.ok) throw new Error('relay ' + r.status); });
 }
-function flush() {
-  if (!store.ref) return;
-  if (store.writing) { store.queued = true; return; }
-  store.dirty = false;
-  store.writing = true;
-  var body = { v: 2, updated: S.updated, s: clone(S.s) };
-  store.ref.set(body).then(function () {
-    store.writing = false;
-    if (store.queued) { store.queued = false; flush(); }
-  }, function (e) {
-    store.writing = false;
-    if (e && (e.code === 'invalid_argument' || e.code === 'not_granted')) { store.readOnly = true; renderAll(); }
-    else if (e && e.code === 'unavailable') { setTimeout(flush, 1500 + Math.random() * 1000); }
+function scheduleFlush(ms) {
+  clearTimeout(sync.timer);
+  sync.timer = setTimeout(flushOut, ms == null ? 600 : ms);
+}
+function flushOut() {
+  clearTimeout(sync.timer); sync.timer = null;
+  if (sync.flushing) { sync.again = true; return; }
+  Object.keys(sync.out).forEach(function (id) { if (sync.m[id] && newer(sync.m[id], sync.out[id])) delete sync.out[id]; });
+  var ids = Object.keys(sync.out);
+  if (!ids.length) { saveSync(); renderSyncState(); return; }
+  sync.flushing = true;
+  renderSyncState();
+  var jobs = [];
+  for (var i = 0; i < ids.length; i += 40) {
+    (function (chunk) {
+      var c = {};
+      chunk.forEach(function (id) { c[id] = sync.out[id]; });
+      jobs.push(relaySend(c).then(function () {
+        chunk.forEach(function (id) { var v = sync.out[id]; if (v && v[0] === c[id][0] && v[1] === c[id][1]) delete sync.out[id]; });
+      }));
+    })(ids.slice(i, i + 40));
+  }
+  Promise.all(jobs).then(function () {
+    sync.flushing = false; sync.retry = 0; sync.netOk = true;
+    saveSync(); renderSyncState();
+    if (sync.again || pendingCount()) { sync.again = false; scheduleFlush(50); }
+  }, function () {
+    sync.flushing = false; sync.again = false; sync.netOk = false;
+    saveSync(); renderSyncState();
+    sync.retry = Math.min(sync.retry + 1, 6);
+    scheduleFlush([2e3, 5e3, 15e3, 30e3, 60e3, 120e3][sync.retry - 1]);
   });
 }
-
-function connectDb() {
-  var c = window.claude;
-  if (!c || typeof c.use !== 'function') return;
-  store.mode = 'pending';
-  store.baseUpdated = S.updated;
-  renderSyncState();
-  c.use('db').then(function (db) {
-    if (!db) { store.mode = 'local'; renderAll(); return; }
-    store.mode = 'db';
-    try { store.ref = db.doc('progress/main'); } catch (e) { store.mode = 'local'; renderAll(); return; }
-    store.ref.onSnapshot(function (snap) {
-      if (snap.metadata && snap.metadata.hasPendingWrites) return;
-      var data = snap.exists ? snap.data() : null;
-      if (!store.ready) {
-        store.ready = true;
-        var edits = store.edits; store.edits = {};
-        var hasEdits = Object.keys(edits).length > 0;
-        if (validState(data)) {
-          if (!hasEdits && store.baseUpdated > data.updated) {
-            flush(); // this device holds newer progress than the account copy
-          } else {
-            var merged = cleanMap(data.s);
-            Object.keys(edits).forEach(function (k) { if (edits[k]) merged[k] = edits[k]; else delete merged[k]; });
-            S = { v: 2, updated: hasEdits ? Date.now() : data.updated, s: merged };
-            if (hasEdits) flush();
-          }
-        } else if (hasEdits || S.updated > SEED.updated) {
-          flush();
-        }
-        lsSet(LS_KEY, JSON.stringify(S));
-        renderAll();
-        return;
-      }
-      if (validState(data) && !store.writing && !store.dirty && data.updated !== S.updated) {
-        S = { v: 2, updated: data.updated, s: cleanMap(data.s) };
-        lsSet(LS_KEY, JSON.stringify(S));
-        renderAll();
-      }
-    }, function () { store.mode = 'local'; store.ready = false; renderAll(); });
-  }, function () { store.mode = 'local'; renderAll(); });
+/* Reads the relay from a couple of minutes before the newest message already seen (the relay can
+   take a few seconds to show a new message), or its whole 12 hours the first time. */
+function relayPoll() {
+  var since = sync.lastTime > 0 ? String(Math.max(1, sync.lastTime - 120)) : 'all';
+  return fetch(RELAY + '/json?poll=1&since=' + since, { cache: 'no-store' })
+    .then(function (r) { if (!r.ok) throw new Error('relay ' + r.status); return r.text(); })
+    .then(function (text) {
+      var n = 0;
+      text.split('\n').forEach(function (line) {
+        var msg = null, body = null;
+        if (!line) return;
+        try { msg = JSON.parse(line); } catch (e) { return; }
+        if (!msg || msg.event !== 'message' || typeof msg.message !== 'string') return;
+        if (typeof msg.time === 'number' && msg.time > sync.lastTime) sync.lastTime = msg.time;
+        try { body = JSON.parse(msg.message); } catch (e) { return; }
+        if (body && body.hh === 3) n += mergeInto(sync.m, body.c);
+      });
+      sync.netOk = true;
+      return n;
+    }, function (e) { sync.netOk = false; throw e; });
+}
+function loadProgress() {
+  var i = 0;
+  function next() {
+    var u = PROGRESS_URLS[i++];
+    return fetch(u + (/^https?:/.test(u) ? '' : '?t=' + Date.now()), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('progress ' + r.status); return r.json(); })
+      .then(function (j) { if (!j || j.v !== 3 || !j.items || typeof j.items !== 'object') throw new Error('progress format'); return j.items; })
+      .catch(function (e) { if (i < PROGRESS_URLS.length) return next(); throw e; });
+  }
+  return next().then(function (items) {
+    sync.base = items; sync.progressAt = Date.now();
+    return mergeInto(sync.m, items);
+  });
+}
+/* Safety net: if ticks older than 45 minutes still aren't in progress.json, send them again
+   (at most every 6 hours), so they survive even if the save job was down for a while. */
+function resendUnsaved() {
+  var now = Date.now(), n = 0;
+  if (!sync.base || now - sync.repubAt < 6 * 36e5) return;
+  Object.keys(sync.m).forEach(function (id) {
+    var v = sync.m[id];
+    if (v[1] < now - 45 * 6e4 && newer(v, sync.base[id]) && !sync.out[id]) { sync.out[id] = v; n++; }
+  });
+  if (n) { sync.repubAt = now; saveSync(); scheduleFlush(200); }
+}
+function refresh(withProgress) {
+  if (sync.polling) return;
+  sync.polling = true;
+  var jobs = [relayPoll()];
+  if (withProgress) jobs.push(loadProgress());
+  Promise.all(jobs.map(function (p) { return p.catch(function () { return 0; }); })).then(function (counts) {
+    var changed = counts.some(function (n) { return n > 0; });
+    sync.polling = false;
+    if (sync.loading) { sync.loading = false; changed = true; }
+    if (changed) { deriveS(); saveSync(); renderAll(); } else { saveSync(); renderSyncState(); }
+    resendUnsaved();
+    if (pendingCount() && !sync.flushing) flushOut();
+  });
+}
+function startSync() {
+  refresh(true);
+  setInterval(function () {
+    if (document.visibilityState === 'visible') refresh(Date.now() - sync.progressAt > 10 * 6e4);
+  }, POLL_MS);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') refresh(Date.now() - sync.progressAt > 2 * 6e4);
+    else if (pendingCount()) flushOut();
+  });
+  window.addEventListener('pagehide', function () { if (pendingCount()) flushOut(); });
+  window.addEventListener('online', function () { refresh(true); });
 }
 
 /* ---- Progress codes: 3 statuses per character, base 27 ---- */
@@ -1081,49 +1233,50 @@ function renderRaven() {
   $('raven').innerHTML = html;
 }
 
+var SYNC_TEXT = {
+  loading: ['Syncing', 'Syncing…'],
+  synced: ['Synced', 'Synced. Every device shows these ticks.'],
+  saving: ['Saving', 'Saving your latest ticks…'],
+  pending: ['Offline · saved here', 'Offline. Your latest ticks are kept on this device and sync when you’re back online.'],
+  offline: ['Offline', 'Offline. Showing the last progress this device saw.']
+};
+function syncPhase() {
+  var pending = pendingCount() > 0;
+  if (sync.loading) return 'loading';
+  if (sync.netOk === false) return pending ? 'pending' : 'offline';
+  return pending ? 'saving' : 'synced';
+}
 function renderSyncState() {
-  var short, on = false, link = '';
-  if (store.mode === 'db' && store.readOnly) short = 'View only';
-  else if (store.mode === 'db' && store.ready) { short = 'Synced to your Claude account'; on = true; }
-  else if (store.mode === 'db' || store.mode === 'pending') short = 'Connecting';
-  else {
-    short = 'Saved in this browser';
-    if (isHosted() && SYNCED_URL) link = '<a href="' + SYNCED_URL + '" target="_blank" rel="noopener">Open synced copy</a>';
-  }
+  var p = syncPhase(), t = SYNC_TEXT[p];
+  var cls = p === 'synced' ? ' on' : (p === 'pending' || p === 'offline') ? ' off' : '';
   var chip = $('strip-sync');
   if (chip) {
-    chip.className = 'sync-chip' + (on ? ' on' : '') + (link ? ' has-link' : '');
-    chip.innerHTML = '<span class="dot"></span><span class="sync-text">' + short + '</span>' + link;
+    chip.className = 'sync-chip' + cls;
+    chip.innerHTML = '<span class="dot"></span><span class="sync-text">' + t[0] + '</span>';
   }
   var el = $('save-state');
-  if (!el) return;
-  if (store.mode === 'db' && store.readOnly) { el.className = 'save-state'; el.textContent = 'View only. You can’t change this copy.'; }
-  else if (store.mode === 'db' && store.ready) { el.className = 'save-state synced'; el.textContent = 'Saved to your Claude account. Syncs on every device.'; }
-  else if (store.mode === 'db' || store.mode === 'pending') { el.className = 'save-state'; el.textContent = 'Connecting to your saved progress…'; }
-  else { el.className = 'save-state'; el.textContent = 'Saved in this browser on this device.'; }
+  if (el) { el.className = 'save-state' + (p === 'synced' ? ' synced' : cls); el.textContent = t[1]; }
 }
 
 function renderSync() {
   var keep = $('code-in') ? $('code-in').value : '';
   var code = encode(S.s);
   var c = countMap(S.s);
-  var hosted = isHosted();
-  var link = hosted ? (location.href.split('#')[0] + '#p=' + code) : '';
+  var link = location.href.split('#')[0] + '#p=' + code;
   var html = '<div class="panel"><h2>Where your progress lives</h2><p><span class="save-state" id="save-state"></span></p>' +
-    (hosted ? '<p>For progress that follows you to every device, use the <a href="' + SYNCED_URL + '" target="_blank" rel="noopener">synced copy on your Claude account</a>. To move the ticks from this browser there, copy your progress link below and paste it into its Load progress box.</p>' +
-      '<p>Browsers can clear saved site data, and each device keeps its own copy. Keep your progress link somewhere safe (Notes, an email to yourself). Opening it on any device loads your progress.</p>' +
-      '<p class="note">iPhone: Safari can wipe data for sites you haven’t opened in 7 days. Adding this page to your Home Screen avoids that.</p>'
-      : '<p>Every tick is saved to this page on your Claude account, so it’s the same on your phone and PC. The code below is a backup you can paste into any copy of this tracker.</p>') +
+    '<p>Every tick syncs to all your devices on its own, in any browser. There’s nothing to sign in to or set up.</p>' +
+    '<p>Open devices pick up a change within about 30 seconds, and every tick is saved into this site’s GitHub repository, which keeps the full history.</p>' +
+    '<p class="note">Progress is stored in the site’s public repository, alongside the page.</p>' +
     '</div>' +
-    '<div class="panel"><h2>Progress ' + (hosted ? 'link' : 'code') + '</h2><p>' + c.d + ' finished and ' + c.l + ' in progress.</p>' +
-    '<div class="codebox"><input id="code-out" readonly value="' + esc(hosted ? link : code) + '" aria-label="Progress code"><button class="btn primary" type="button" data-action="copy">Copy</button></div>' +
+    '<div class="panel"><h2>Backup link</h2><p>' + c.d + ' finished and ' + c.l + ' in progress. You shouldn’t need it, but opening this link on any device offers to restore exactly this progress.</p>' +
+    '<div class="codebox"><input id="code-out" readonly value="' + esc(link) + '" aria-label="Backup link"><button class="btn primary" type="button" data-action="copy">Copy</button></div>' +
     '<div class="msg" id="copy-msg" aria-live="polite"></div></div>' +
-    '<div class="panel"><h2>Load progress</h2><p>Paste a progress link or code from another device.</p>' +
+    '<div class="panel"><h2>Load progress</h2><p>Paste a backup link or code. It replaces your progress on every device.</p>' +
     '<div class="codebox"><input id="code-in" placeholder="hh2-… or a full link" aria-label="Paste a progress code"><button class="btn" type="button" data-action="import">Load</button></div>' +
     '<div id="import-zone">' + importConfirmHtml() + '</div><div class="msg" id="import-msg" aria-live="polite"></div></div>' +
-    '<div class="panel"><h2>Start over</h2><p>Reset to the Audible library snapshot from your screenshot, or clear every tick.</p>' +
+    '<div class="panel"><h2>Start over</h2><p>Reset to the Audible library snapshot from your screenshot, or clear every tick. Either one applies to every device.</p>' +
     '<div class="codebox"><button class="btn" type="button" data-action="ask-reset" data-kind="seed">Reset to library snapshot</button><button class="btn danger" type="button" data-action="ask-reset" data-kind="clear">Clear everything</button></div>' +
-    (confirmReset ? '<div class="confirm"><p>' + (confirmReset === 'seed' ? 'Replace your progress with the library snapshot?' : 'Clear all progress? This can’t be undone unless you saved a code.') + '</p><div class="btns"><button class="btn primary" type="button" data-action="do-reset">Yes, ' + (confirmReset === 'seed' ? 'reset' : 'clear') + '</button><button class="btn" type="button" data-action="cancel-reset">Cancel</button></div></div>' : '') +
+    (confirmReset ? '<div class="confirm"><p>' + (confirmReset === 'seed' ? 'Replace your progress on every device with the library snapshot?' : 'Clear all progress on every device? A backup link or the repo history can bring it back.') + '</p><div class="btns"><button class="btn primary" type="button" data-action="do-reset">Yes, ' + (confirmReset === 'seed' ? 'reset' : 'clear') + '</button><button class="btn" type="button" data-action="cancel-reset">Cancel</button></div></div>' : '') +
     '</div>';
   $('sync').innerHTML = html;
   if (keep) $('code-in').value = keep;
@@ -1147,8 +1300,15 @@ function renderBanner() {
   var c = countMap(map);
   el.className = 'banner';
   el.hidden = false;
-  el.innerHTML = '<p>This link carries saved progress: <b>' + c.d + '</b> finished, <b>' + c.l + '</b> in progress. Load it on this device?</p>' +
+  el.innerHTML = '<p>This link carries saved progress: <b>' + c.d + '</b> finished, <b>' + c.l + '</b> in progress. Load it? It replaces your progress on every device.</p>' +
     '<button class="btn primary" type="button" data-action="confirm-import">Load progress</button><button class="btn" type="button" data-action="cancel-import">Ignore</button>';
+}
+function showNotice(n) {
+  var el = $('import-banner');
+  el.className = 'banner';
+  el.hidden = false;
+  el.innerHTML = '<p>Synced <b>' + n + '</b> tick' + (n === 1 ? '' : 's') + ' this device had saved on its own. They now show on every device.</p>' +
+    '<button class="btn" type="button" data-action="dismiss-notice">OK</button>';
 }
 function clearHash() { try { history.replaceState(null, '', location.pathname + location.search + '#' + currentTab); } catch (e) {} }
 
@@ -1231,6 +1391,7 @@ document.addEventListener('click', function (e) {
     $('import-banner').hidden = true; clearHash(); renderSync();
     var m2 = $('import-msg'); if (m2) { m2.className = 'msg ok'; m2.textContent = 'Progress loaded.'; }
   }
+  else if (a === 'dismiss-notice') { $('import-banner').hidden = true; }
   else if (a === 'cancel-import') { pendingImport = null; $('import-banner').hidden = true; clearHash(); renderSync(); }
   else if (a === 'ask-reset') { confirmReset = el.getAttribute('data-kind'); renderSync(); }
   else if (a === 'cancel-reset') { confirmReset = null; renderSync(); }
@@ -1258,16 +1419,18 @@ window.addEventListener('hashchange', function () {
    BOOT
    ===================================================================== */
 (function boot() {
+  initSync();
   var h = (location.hash || '').replace('#', '');
   showTab(/^(guide|raven|sync)$/.test(h) ? h : 'guide');
   renderAll();
   renderBanner();
-  if (navigator.storage && navigator.storage.persist && isHosted()) { try { navigator.storage.persist(); } catch (e) {} }
-  connectDb();
+  if (!pendingImport && sync.carried) showNotice(sync.carried);
+  if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch (e) {} }
+  startSync();
 })();
 
 /* Test hook (harmless in production). */
-window.__hh = { encode: encode, decode: decode, state: function () { return S; }, BOOKS: BOOKS, ORDER: ORDER, RG_ACTS: RG_ACTS, store: store };
+window.__hh = { encode: encode, decode: decode, state: function () { return S; }, BOOKS: BOOKS, ORDER: ORDER, RG_ACTS: RG_ACTS, sync: sync, refresh: refresh, flushOut: flushOut };
 })();
 </script>
 </body>
